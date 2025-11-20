@@ -3,9 +3,9 @@ import { adminRouter, clientRouter, userRouter } from './index'
 
 function AppRouter() {
 
-    clientRouter
-    adminRouter
-    userRouter
+    clientRouter //landingPage
+    adminRouter //adminPage
+    userRouter //userPage
 
 
     return (
