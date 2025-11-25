@@ -28,7 +28,7 @@ const LandingPage = () => {
 
           {/* ปุ่มไปหน้า Admin (ผู้ดูแลระบบ) */}
           <Link 
-            to="/admin" 
+            to="/admin/login"  // <--- แก้ไขตรงนี้จาก /admin เป็น /admin/login
             className="flex items-center justify-center gap-2 bg-[#0b2545] hover:bg-[#1a3b61] text-white font-bold py-3 px-8 rounded-lg shadow-lg transition transform hover:-translate-y-1"
           >
             <ShieldCheck size={20} />

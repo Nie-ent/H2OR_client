@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { Upload, ArrowLeft } from 'lucide-react';
 import { registerSchema } from '../../validations/validationSchema';
 
 // Component Input ย่อย (Clean Code: ใช้ซ้ำได้)
@@ -21,13 +23,14 @@ const FormInput = ({ label, name, register, error, type = "text", placeholder, r
 );
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const { register, handleSubmit, formState: { errors }, reset, watch } = useForm({
     resolver: zodResolver(registerSchema),
     mode: "onBlur"
   });
 
-  // ดูค่าไฟล์เพื่อแสดงชื่อไฟล์ที่เลือก (User Experience)
   const resumeFile = watch('resume');
 
   const onSubmit = async (data) => {
@@ -45,21 +48,32 @@ const RegisterForm = () => {
   };
 
   return (
-    // 1. แก้ไข Layout: ใช้ min-h-screen และ w-full เพื่อเต็มจอ
-    // เปลี่ยน items-center เป็น items-start (หรือเอาออก) เพื่อให้ Scroll ได้เมื่อฟอร์มยาว
     <div className="min-h-screen w-full overflow-hidden bg-[#0b2545] flex justify-center py-10 px-4 ">
-      
-      <div className="w-full max-w-3xl bg-white rounded-xl shadow-lg p-6">
 
-      <div className="max-h-[80vh] overflow-y-auto">
+     {/* Scrollable Wrapper */}
+      <div className="w-full h-full overflow-y-auto py-10 px-4">
+        <div className="flex justify-center min-h-full items-start">
 
       <form onSubmit={handleSubmit(onSubmit)} className="bg-white w-full  max-w-3xl rounded-xl shadow-xl p-8 space-y-6">
 
+        {/* ปุ่มย้อนกลับ (Back Button) */}
+        <div className="mb-4">
+                <button 
+                    type="button"  // <--- สำคัญมาก! ต้องใส่ type="button" เพื่อไม่ให้มันไป Validate ฟอร์ม
+                    onClick={() => navigate('/')}
+                    className="flex items-center gap-2 text-gray-500 hover:text-[#0b2545] transition-colors font-medium text-sm"
+                >
+                    <ArrowLeft size={20} />
+                    <span>ย้อนกลับ</span>
+                </button>
+            </div>
+            
         {/* Header */}
         <div className="text-center space-y-1 mb-6">
           <h1 className="text-2xl font-bold text-gray-800">แบบฟอร์มสมัครงาน</h1>
           <p className="text-gray-500 text-sm">กรุณากรอกข้อมูลให้ครบถ้วนและถูกต้อง</p>
         </div>
+
 
         {/* 3. แก้ไข Upload: เปลี่ยน div เป็น label เพื่อให้กดแล้วเด้งหน้าต่างเลือกไฟล์ */}
         <div className="space-y-2">
