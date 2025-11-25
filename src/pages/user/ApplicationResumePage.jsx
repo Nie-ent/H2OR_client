@@ -1,7 +1,14 @@
-function ApplicationResumePage() {
-    return (
-        <div>ApplicationResumePage</div>
-    )
-}
+import React from "react";
+import RegisterForm from "../../components/user/RegisterForm";
 
-export default ApplicationResumePage
+const ApplicationResumePage = () => {
+  return (
+    <div className=" bg-gray-50">
+      <div>
+        <RegisterForm />
+      </div>
+    </div>
+  );
+};
+
+export default ApplicationResumePage;
