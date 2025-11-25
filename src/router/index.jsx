@@ -1,20 +1,52 @@
-import { createBrowserRouter } from "react-router";
-import DashboardPage from "../pages/Admin/DashboardPage";
-import LandingPage from "../pages/Client/LandingPage";
+//src/router/index.jsx
+
+import { createBrowserRouter } from "react-router-dom";
 import ApplicationResumePage from "../pages/User/ApplicationResumePage";
+import LandingPage from "../pages/Client/LandingPage";
+import DashboardPage from "../pages/Admin/DashboardPage";
+import AdminLayout from "../layout/AdminLayout";
+import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
+import AdminLoginPage from "../pages/Admin/AdminLoginPage";
 
-export const clientRouter = createBrowserRouter([
-    { path: '/', element: <LandingPage /> }
-])
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />,
+  },
 
-export const userRouter = createBrowserRouter([
-    { path: '/', element: <ApplicationResumePage /> },
-])
+  {
+    path: "/apply",
+    element: <ApplicationResumePage />,
+  },
 
-export const adminRouter = createBrowserRouter([
-    {
-        path: '/', element: <MainLayout />, children: [
-            { index: true, element: <DashboardPage /> }
-        ]
-    }
-])
+  {
+    path: "/admin/login",
+    element: <AdminLoginPage />,
+  },
+
+  {
+    path: "/super-admin/login",
+    element: <AdminLoginPage />,
+  },
+
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        index: true, 
+        element: <DashboardPage />,
+      },
+      {
+        path: "create-admin",
+        element: <RegisterAdminPage />,
+      },
+
+      // ในอนาคตเพิ่มหน้าจัดการ User ได้ง่ายๆ แค่เพิ่มบรรทัดนี้:
+      // { path: 'users', element: <ManageUsersPage /> },
+      // { path: 'settings', element: <SettingsPage /> },
+    ],
+  },
+]);
+
+export default router;

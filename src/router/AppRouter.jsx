@@ -1,3 +1,8 @@
+//src/router/AppRouter.jsx
+
+{/* Testing only */}
+import { ToastContainer } from 'react-toastify'
+
 import { RouterProvider } from 'react-router'
 import { adminRouter, clientRouter, userRouter } from './index'
 
@@ -9,7 +14,12 @@ function AppRouter() {
 
 
     return (
-        <RouterProvider router={clientRouter} />
+        <>
+        <RouterProvider router={router} />
+        
+        {/* Testing only */}
+        <ToastContainer position="top-right" autoClose={3000} />
+        </>
     )
 }
 
