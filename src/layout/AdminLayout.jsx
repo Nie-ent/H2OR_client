@@ -1,6 +1,5 @@
-import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../components/admin/Sidebar'; // เรียก Sidebar ที่เราเพิ่งทำ
+import Sidebar from '../components/admin/Sidebar'; 
 
 const AdminLayout = () => {
   return (
