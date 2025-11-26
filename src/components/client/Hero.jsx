@@ -1,6 +1,6 @@
-import React from 'react'
-import StatCard from './StatCard';
-import Profile from '../../assets/imge/profile.png'
+import React from "react";
+import StatCard from "./StatCard";
+import Profile from "../../assets/imge/profile.png";
 
 const Hero = () => (
   <section className="gradient-bg w-full py-20 relative">
@@ -38,20 +38,20 @@ const Hero = () => (
 
         {/* Hero Image Placeholder */}
         <div className=" floating w-full">
-        <div className="relative group perspective-1000">
-          <div className="absolute -inset-3 bg-gradient-to-r from-[#f2b724] to-[#f2b724]/20 rounded-3xl blur-lg opacity-30 group-hover:opacity-60 transition duration-500"></div>
-          
-          {/* ตัวรูปภาพ */}
-          <img 
-            src= {Profile}
-            alt="Profile" 
-            className="relative w-full h-auto rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-2 border border-white/10"
-          />
-        </div>
+          <div className="relative group perspective-1000">
+            <div className="absolute -inset-3 bg-gradient-to-r from-[#f2b724] to-[#f2b724]/20 rounded-3xl blur-lg opacity-30 group-hover:opacity-60 transition duration-500"></div>
+
+            {/* ตัวรูปภาพ */}
+            <img
+              src={Profile}
+              alt="Profile"
+              className="relative w-full h-auto rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-2 border border-white/10"
+            />
+          </div>
         </div>
       </div>
     </div>
   </section>
 );
 
-export default Hero
+export default Hero;
