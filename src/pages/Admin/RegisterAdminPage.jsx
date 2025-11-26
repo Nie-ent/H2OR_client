@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
@@ -245,7 +245,7 @@ const RegisterAdminPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="flex items-center gap-2 bg-[#0b2545] hover:bg-[#1a3b61] text-white font-bold py-3 px-8 rounded-lg shadow transition disabled:opacity-50"
+            className="flex items-center gap-2 bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 px-8 rounded-lg shadow transition disabled:opacity-50"
           >
             {isSubmitting ? (
               "กำลังบันทึก..."

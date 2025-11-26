@@ -62,7 +62,7 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-[#0b2545] flex items-center justify-center p-4">
+    <div className="min-h-screen w-full bg-navy flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
         
         {/* Header */}
@@ -140,7 +140,7 @@ const AdminLoginPage = () => {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-[#0b2545] hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70 flex items-center justify-center gap-2"
+                  className="w-full bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70 flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? 'Checking...' : <>เข้าสู่ระบบ <ArrowRight size={20}/></>}
                 </button>
