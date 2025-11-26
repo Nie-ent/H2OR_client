@@ -10,7 +10,7 @@ const NewsSection = () => {
     navigate("/apply");
   };
   const handleClickAdmin = () => {
-    navigate("/admin");
+    navigate("/admin/login");
   };
   return (
     <section className="w-full bg-gradient-to-br from-[#131e2d] to-[#3b5474] py-20 relative overflow-hidden">
@@ -32,7 +32,7 @@ const NewsSection = () => {
           {/* --------------------------- */}
 
           <div>
-            <div className="inline-block bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10">
+            <div className="m-5 inline-block bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10">
               ข่าวสารและกิจกรรม
             </div>
             <h3 className="text-[#f1f3f4] text-[3rem] font-extrabold m-0 mb-6 leading-[1.2] drop-shadow-[0_2px_15px_rgba(0,0,0,0.2)]">
