@@ -1,8 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+// src/pages/Admin/DashboardPage.jsx
+
+import  { useEffect, useMemo, useState } from "react";
 
 import { create } from 'zustand';
 import { Users, Clock, CheckCircle, XCircle, LayoutDashboard, ChevronLeft, ChevronRight, User } from "lucide-react"; 
-
 
 // --- 1. Mock Data Generator ---
 const generateMockApplicants = (count) => {
