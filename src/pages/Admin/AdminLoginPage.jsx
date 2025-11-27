@@ -61,11 +61,11 @@ const AdminLoginPage = () => {
  const onForgotSubmit = async (data) => {
   try {
     await axiosInstance.post("/admin/forgot-password", data);
-    toast.success("ส่งลิงก์รีเซ็ตแล้ว");
+    toast.success("รีเซ็ตรหัสผ่านแล้ว");
     setView("login");
     resetForgot();
   } catch (error) {
-    toast.error(error.response?.data?.message || "ไม่สามารถส่งลิงก์รีเซ็ตได้");
+    toast.error(error.response?.data?.message || "ไม่สามารถรีเซ็ตรหัสผ่านได้");
   }
 };
 
@@ -149,7 +149,7 @@ const AdminLoginPage = () => {
                 <button 
                   type="submit" 
                   disabled={isSubmitting}
-                  className="w-full bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70 flex items-center justify-center gap-2"
+                  className="w-full bg-navy hover:bg-lightnavy text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70 flex items-center justify-center gap-2"
                 >
                   {isSubmitting ? 'Checking...' : <>เข้าสู่ระบบ <ArrowRight size={20}/></>}
                 </button>
@@ -189,10 +189,11 @@ const AdminLoginPage = () => {
                     )}
                  </div>
                  {/* ... Buttons ... */}
-                 <button type="submit" className="w-full bg-yellow-500 text-white font-bold py-3 rounded-lg shadow">ส่งลิงก์รีเซ็ต</button>
-                 <button type="button" onClick={() => setView('login')} className="w-full text-gray-500 text-sm mt-2">กลับไปหน้าเข้าสู่ระบบ</button>
+                 <Link to="/admin/forgotpassword"><button type="submit" className="w-full bg-navy hover:bg-lightnavy text-white font-bold py-3 rounded-lg shadow">รีเซ็ตรหัสผ่าน</button></Link>
+                 <Link to="/admin/login"><button type="button" onClick={() => setView('login')} className="w-full text-gray-500 text-sm mt-2">กลับไปหน้าเข้าสู่ระบบ</button></Link>
                </form>
             )}
+            
         </div>
       </div>
     </div>
