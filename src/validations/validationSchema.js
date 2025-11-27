@@ -181,7 +181,3 @@ export const forgotPasswordSchema = z.object({
 });
 
 
-// export const forgotPasswordSchema = z.object({
-//   email: z.string().email(ERRORS.EMAIL_INVALID),
-// });
-

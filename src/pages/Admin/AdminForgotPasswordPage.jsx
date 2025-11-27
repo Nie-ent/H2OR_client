@@ -109,7 +109,7 @@ const AdminForgotPasswordPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-navy hover:bg-[#1a3b61] text-white font-semibold py-3 rounded-lg"
+              className="w-full bg-navy hover:bg-lightnavy text-white font-semibold py-3 rounded-lg"
             >
               ยืนยันเปลี่ยนรหัสผ่าน
             </button>
