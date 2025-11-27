@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Upload, ArrowLeft, FileText, X } from "lucide-react";
 import { registerSchema } from "../../validations/validationSchema";
 
+
 // --- 1. Reusable UI Components (ควรแยกไฟล์ไปไว้ใน src/components/ui/forms/...) ---
 
 const Label = ({ children, required }) => (
@@ -331,16 +332,16 @@ const RegisterForm = () => {
                   register={register}
                   error={errors.addressType}
                   required
+                  disabled
+                  placeholder="เลือกประเภทที่อยู่"
                   options={[
-                    { label: "บ้านเดี่ยว", value: "house" },
-                    { label: "คอนโดมิเนียม", value: "condo" },
-                    { label: "ทาวน์โฮม", value: "townhome" },
-                    { label: "หอพัก/อพาร์ทเม้นท์", value: "apartment" },
+                    { label: "ที่อยู่ปัจจุบัน", value: "current" },
+                    { label: "ที่อยู่ตามทะเบียนบ้าน", value: "registered" }
                   ]}
                 />
 
-                <FormInput
-                  label="ที่อยู่ปัจจุบัน"
+                 <FormInput
+                  label="บ้านเลขที่"
                   name="address"
                   register={register}
                   error={errors.address}

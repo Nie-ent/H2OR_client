@@ -9,9 +9,9 @@ import router from './router/index';
 
 function App() {
   // ถ้า router เป็น undefined หน้าจอจะขาวครับ
-  if (!router) {
-      return <div>Loading Router... (หรือแสดง Error: Router Not Found)</div>;
-  }
+  // if (!router) {
+  //     return <div>Loading Router... (หรือแสดง Error: Router Not Found)</div>;
+  // }
   
   return (
     <>

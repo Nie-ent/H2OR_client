@@ -1,12 +1,10 @@
 //src/pages/client/LandingPage.jsx
 
-import React from "react";
 import Navbar from "../../components/client/Navbar";
 import Hero from "../../components/client/Hero";
 import NewsSection from "../../components/client/NewsSection";
 import Services from "../../components/client/Services";
 import Footer from "../../components/client/Footer";
-
 
 
 // --- Main App Component ---

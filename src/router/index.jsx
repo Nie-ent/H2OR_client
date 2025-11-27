@@ -1,10 +1,10 @@
 //src/router/index.jsx
 
 import { createBrowserRouter } from "react-router-dom";
-import ApplicationResumePage from "../pages/User/ApplicationResumePage";
-import LandingPage from "../pages/Client/LandingPage";
-import DashboardPage from "../pages/Admin/DashboardPage";
 import AdminLayout from "../layout/AdminLayout";
+import LandingPage from "../pages/Client/LandingPage";
+import ApplicationResumePage from "../pages/User/ApplicationResumePage";
+import DashboardPage from "../pages/Admin/DashboardPage";
 import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
 import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
@@ -40,17 +40,13 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       {
-        index: true, 
+        index: true,
         element: <DashboardPage />,
       },
       {
         path: "create-admin",
         element: <RegisterAdminPage />,
       },
-
-      // ในอนาคตเพิ่มหน้าจัดการ User ได้ง่ายๆ แค่เพิ่มบรรทัดนี้:
-      // { path: 'users', element: <ManageUsersPage /> },
-      // { path: 'settings', element: <SettingsPage /> },
     ],
   },
 ]);
