@@ -1,7 +1,9 @@
-import React from "react";
+//src/components/client/NewsSection.jsx
+
 import { useNavigate } from "react-router";
-import Notic from "../../assets/imge/notic.png";
+import { useForm } from "react-hook-form";
 import Notictwo from "../../assets/imge/notic1.png";
+
 
 const NewsSection = () => {
   const navigate = useNavigate();
@@ -29,7 +31,6 @@ const NewsSection = () => {
               className="relative w-full h-auto rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-2 border border-white/10"
             />
           </div>
-          {/* --------------------------- */}
 
           <div>
             <div className="m-5 inline-block bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10">
@@ -55,7 +56,7 @@ const NewsSection = () => {
                 onClick={handleClickAdmin}
                 className="btn-primary bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10"
               >
-                Admin
+                Admin Login
               </button>
             </div>
           </div>

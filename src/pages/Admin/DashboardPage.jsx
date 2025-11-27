@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 // src/pages/Admin/DashboardPage.jsx
 
 import  { useEffect, useMemo, useState } from "react";
@@ -422,10 +421,6 @@ const ApplicantCalendar = ({ applicants }) => {
 // =============================================================================================
 // IV. MAIN COMPONENT (DASHBOARDPAGE)
 // =============================================================================================
-=======
-import React from "react";
-
->>>>>>> parent of d56145e (dashboard)
 
 const DashboardPage = () => {
   return (
@@ -441,8 +436,6 @@ const DashboardPage = () => {
            </div>
         </header>
 
-
-<<<<<<< HEAD
     return (
         <div className="space-y-8 p-8 bg-gray-50 min-h-screen"> 
             
@@ -486,22 +479,6 @@ const DashboardPage = () => {
                     )}
                 </div>
             </div>
-=======
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <p className="text-gray-500 text-sm">ใบสมัครทั้งหมด</p>
-            <p className="text-3xl font-bold text-[#0b2545]">12</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <p className="text-gray-500 text-sm">รอการตรวจสอบ</p>
-            <p className="text-3xl font-bold text-yellow-500">5</p>
-          </div>
-          <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-            <p className="text-gray-500 text-sm">สัมภาษณ์แล้ว</p>
-            <p className="text-3xl font-bold text-green-500">7</p>
-          </div>
->>>>>>> parent of d56145e (dashboard)
         </div>
       {/* </main> */}
     </div>

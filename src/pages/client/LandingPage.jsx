@@ -1,6 +1,5 @@
 //src/pages/client/LandingPage.jsx
 
-
 import Navbar from "../../components/client/Navbar";
 import Hero from "../../components/client/Hero";
 import NewsSection from "../../components/client/NewsSection";

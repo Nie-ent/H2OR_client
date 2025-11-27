@@ -30,7 +30,9 @@ const AdminLoginPage = () => {
    // ✅ เรียก Action จาก Zustand Store
   const loginAction = useAuthStore((state) => state.login);
 
-  // --- 1. Login Form Config ---
+  // --------------------------------------------------------
+  // 1️⃣ Login Form Configuration
+  // --------------------------------------------------------
   const {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
@@ -180,11 +182,11 @@ const AdminLoginPage = () => {
 
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isLoginSubmitting}
                 className="w-full bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70 flex items-center justify-center gap-2"
               >
-                {isSubmitting ? (
-                  "Checking..."
+                {isLoginSubmitting ? (
+                  <><Loader2 className="animate-spin" size={20} /> กำลังตรวจสอบ...</>
                 ) : (
                   <>
                     เข้าสู่ระบบ <ArrowRight size={20} />
@@ -195,7 +197,7 @@ const AdminLoginPage = () => {
               <div className="pt-4 border-t border-gray-100 text-center">
                 <Link
                   to="/super-admin/login"
-                  className="text-sm text-gray-500 hover:text-[#0b2545] font-medium transition flex items-center justify-center gap-1"
+                  className="text-sm text-gray-500 hover:text-navy font-medium transition flex items-center justify-center gap-1"
                 >
                   <ShieldCheck size={16} /> เข้าสู่ระบบสำหรับ Super Admin
                 </Link>
@@ -239,12 +241,14 @@ const AdminLoginPage = () => {
                   </div>
                 )}
               </div>
+
               {/* ... Buttons ... */}
               <button
                 type="submit"
-                className="w-full bg-yellow-500 text-white font-bold py-3 rounded-lg shadow"
+                disabled={isForgotSubmitting} // ใช้ตัวแปรที่ เพิ่มมาใหม่
+                className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-lg shadow transition disabled:opacity-70 flex items-center justify-center gap-2"
               >
-                รีเซ็ตรหัสผ่าน
+               {isForgotSubmitting ? <Loader2 className="animate-spin" size={20} /> : "รีเซ็ตรหัสผ่าน"}
               </button>
               <button
                 type="button"
