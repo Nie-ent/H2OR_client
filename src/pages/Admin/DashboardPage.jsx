@@ -436,7 +436,7 @@ const DashboardPage = () => {
             {/* Header / Title */}
             <header className="flex justify-between items-center pb-4 border-b border-gray-200">
                <h1 className="text-3xl font-extrabold text-[#0b2545] flex items-center gap-2">
-                    <LayoutDashboard size={28} /> **Dashboard ภาพรวมการรับสมัคร**
+                    <LayoutDashboard size={28} /> Dashboard ภาพรวมการรับสมัคร
                </h1>
                <div className="bg-white p-2 px-4 rounded-full shadow-sm flex items-center gap-2 border border-gray-200">
                     <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">HR</div>

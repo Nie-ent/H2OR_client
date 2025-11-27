@@ -32,7 +32,7 @@ const Sidebar = () => {
   const inactiveClass = "text-gray-400 hover:text-white hover:bg-white/5";
 
   return (
-    <aside className="w-64 bg-[#0b2545] text-white hidden md:flex flex-col h-screen sticky top-0 font-sans">
+    <aside className="w-64 bg-navy text-white hidden md:flex flex-col h-screen sticky top-0 font-sans">
       {/* Header */}
       <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center gap-2 tracking-wide">
         H2OR Admin

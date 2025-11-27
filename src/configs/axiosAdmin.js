@@ -1,19 +1,17 @@
 import axios from "axios";
-import dotenv from "dotenv";
 
-
-dotenv.config();
-
-
+// สร้าง instance
 const axiosInstance = axios.create({
-  baseURL: process.env.API_LOGIN || '/api/login',  
-  timeout: 10_000, // 10 seconds timeout
+  baseURL: "http://localhost:8000/api/auth", // เปลี่ยนเป็น URL ของ backend จริง
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
-
+// Request Interceptor → แนบ Token อัตโนมัติ
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("authToken");
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -22,19 +20,17 @@ axiosInstance.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-
+// Response Interceptor → จัดการ error กลาง
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
+    // ถ้า token หมดอายุ → logout หรือ redirect
     if (error.response?.status === 401) {
-      console.log("Token expired or unauthorized access");
+      localStorage.removeItem("token");
+      window.location.href = "/login"; 
     }
     return Promise.reject(error);
   }
 );
 
-
 export default axiosInstance;
-
-
-

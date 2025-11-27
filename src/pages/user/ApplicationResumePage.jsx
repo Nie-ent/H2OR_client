@@ -1,4 +1,5 @@
-import React from "react";
+// src/pages/user/ApplicationResumePage.jsx
+
 import RegisterForm from "../../components/user/RegisterForm";
 
 const ApplicationResumePage = () => {
