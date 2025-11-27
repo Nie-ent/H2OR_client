@@ -1,13 +1,9 @@
 // src/pages/Admin/DashboardPage.jsx
 
 import  { useEffect, useMemo, useState } from "react";
+
 import { create } from 'zustand';
 import { Users, Clock, CheckCircle, XCircle, LayoutDashboard, ChevronLeft, ChevronRight, User } from "lucide-react"; 
-
-
-// =============================================================================================
-// I. MOCK DATA AND ZUSTAND STORE LOGIC (STATE MANAGEMENT)
-// =============================================================================================
 
 // --- 1. Mock Data Generator ---
 const generateMockApplicants = (count) => {
