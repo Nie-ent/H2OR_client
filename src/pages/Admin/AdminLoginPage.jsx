@@ -4,9 +4,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 import { useNavigate, Link } from 'react-router-dom';
 import { Lock, User, ArrowRight, ShieldCheck, Mail, ArrowLeft, AlertCircle } from 'lucide-react';
+import axiosInstance from '../../configs/axiosAdmin.js';
 
 // Import Schema
 import { loginSchema, forgotPasswordSchema } from '../../validations/validationSchema';
+
+
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -42,32 +45,30 @@ const AdminLoginPage = () => {
   }, [errorsLogin]);
 
   const onLoginSubmit = async (data) => {
-    setIsSubmitting(true);
-    try {
-      console.log("Login:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      toast.success("เข้าสู่ระบบสำเร็จ!");
-      navigate('/admin'); 
-    } catch (error) {
-      toast.error("เข้าสู่ระบบไม่สำเร็จ");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const onForgotSubmit = async (data) => {
-    //mock ว่าระบบส่งลิงก์รีเซ็ตรหัสผ่านไปอีเมลแล้ว
-    toast.info("จำลองการส่งลิงก์รีเซ็ตไปที่อีเมล")
-    //เด้งไปหน้าforgot password
-    navigate("admin/forgotpassword", {
-      state : {email: data.email},
-    })
+  setIsSubmitting(true);
+  try {
+    const res = await axiosInstance.post("/admin/login", data);
+    toast.success("เข้าสู่ระบบสำเร็จ!");
+    navigate("/admin");
+  } catch (error) {
+    toast.error(error.response?.data?.message || "เข้าสู่ระบบไม่สำเร็จ");
+  } finally {
+    setIsSubmitting(false);
   }
-  // const onForgotSubmit = async (data) => {
-  //   // ... Logic เดิม
-  //   toast.success("ส่งลิงก์รีเซ็ตแล้ว");
-  //   setView('login');
-  // };
+};
+
+
+ const onForgotSubmit = async (data) => {
+  try {
+    await axiosInstance.post("/admin/forgot-password", data);
+    toast.success("ส่งลิงก์รีเซ็ตแล้ว");
+    setView("login");
+    resetForgot();
+  } catch (error) {
+    toast.error(error.response?.data?.message || "ไม่สามารถส่งลิงก์รีเซ็ตได้");
+  }
+};
+
 
   return (
     <div className="min-h-screen w-full bg-navy flex items-center justify-center p-4">
