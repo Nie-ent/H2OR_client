@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-
+// สร้าง Store ชื่อ useAuthStore
 export const useAuthStore = create(
   persist(
     (set, get) => ({

@@ -1,7 +1,6 @@
 //src/components/client/NewsSection.jsx
 
 import { useNavigate } from "react-router";
-import { useForm } from "react-hook-form";
 import Notictwo from "../../assets/imge/notic1.png";
 
 

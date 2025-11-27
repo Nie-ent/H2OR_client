@@ -1,4 +1,4 @@
-//src/pages/Admin/AdminLoginPage.jsx
+// src/pages/Admin/AdminLoginPage.jsx
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -15,7 +15,6 @@ import {
   Loader2,
 } from "lucide-react";
 
-// import config or store (new)
 import axiosInstance from "../../configs/axiosConfig";
 import { useAuthStore } from "../../stores/useAuthStore";
 import {
@@ -27,7 +26,7 @@ const AdminLoginPage = () => {
   const navigate = useNavigate();
   const [view, setView] = useState("login"); // 'login' หรือ 'forgot'
 
-   // ✅ เรียก Action จาก Zustand Store
+  // ✅ เรียก Action จาก Zustand Store
   const loginAction = useAuthStore((state) => state.login);
 
   // --------------------------------------------------------
@@ -36,21 +35,21 @@ const AdminLoginPage = () => {
   const {
     register: registerLogin,
     handleSubmit: handleSubmitLogin,
-    formState: { errors: errorsLogin, isSubmitting: isLoginSubmitting }, // ใช้ isSubmitting ของ Library เลย
+    formState: { errors: errorsLogin, isSubmitting: isLoginSubmitting },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    mode: "onBlur", // ตรวจสอบทันทีเมื่อคลิกออก (Blur)
+    mode: "onBlur",
   });
 
   // --- 2. Forgot Password Config ---
   const {
     register: registerForgot,
     handleSubmit: handleSubmitForgot,
-    formState: { errors: errorsForgot, isSubmitting: isForgotSubmitting }, // เพิ่ม isSubmitting สำหรับฟอร์มลืมรหัสผ่าน
+    formState: { errors: errorsForgot, isSubmitting: isForgotSubmitting },
     reset: resetForgot,
   } = useForm({
     resolver: zodResolver(forgotPasswordSchema),
-    mode: "onBlur", // ตรวจสอบทันทีเมื่อคลิกออก (Blur)
+    mode: "onBlur",
   });
 
   // ✅ 3. Login Handler (Clean & Modern)
@@ -62,9 +61,9 @@ const AdminLoginPage = () => {
       loginAction(res.data.user, res.data.token);
 
       toast.success("เข้าสู่ระบบสำเร็จ!");
+      // ปรับ navigate ตามต้องการ (ถ้าต้องการไป dashboard ให้แก้เป็น /admin/dashboard)
       navigate("/admin/login");
     } catch (error) {
-      // ดึง Error Message จาก Backend
       const msg =
         error.response?.data?.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
       toast.error(msg);
@@ -86,7 +85,7 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen w-full bg-navy flex items-center justify-center p-4">
+    <div className="min-h-screen w-full bg-navy flex items-center justify-center">
       <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-gray-50 p-6 text-center border-b border-gray-100">
@@ -121,7 +120,6 @@ const AdminLoginPage = () => {
                     type="text"
                     {...registerLogin("username")}
                     placeholder="Enter username"
-                    // เปลี่ยนสีกรอบเป็นสีแดงเมื่อมี Error
                     className={`w-full pl-10 p-3 rounded-lg border ${
                       errorsLogin.username
                         ? "border-red-500 focus:ring-red-200 bg-red-50"
@@ -129,7 +127,6 @@ const AdminLoginPage = () => {
                     } outline-none transition`}
                   />
                 </div>
-                {/* แสดงข้อความ Error ใต้ Input */}
                 {errorsLogin.username && (
                   <div className="flex items-center gap-1 mt-1 text-red-500 text-xs animate-pulse">
                     <AlertCircle size={12} />
@@ -163,7 +160,6 @@ const AdminLoginPage = () => {
                     type="password"
                     {...registerLogin("password")}
                     placeholder="Enter password"
-                    // เปลี่ยนสีกรอบเป็นสีแดงเมื่อมี Error
                     className={`w-full pl-10 p-3 rounded-lg border ${
                       errorsLogin.password
                         ? "border-red-500 focus:ring-red-200 bg-red-50"
@@ -171,7 +167,6 @@ const AdminLoginPage = () => {
                     } outline-none transition`}
                   />
                 </div>
-                {/* แสดงข้อความ Error ใต้ Input */}
                 {errorsLogin.password && (
                   <div className="flex items-center gap-1 mt-1 text-red-500 text-xs animate-pulse">
                     <AlertCircle size={12} />
@@ -186,7 +181,9 @@ const AdminLoginPage = () => {
                 className="w-full bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70 flex items-center justify-center gap-2"
               >
                 {isLoginSubmitting ? (
-                  <><Loader2 className="animate-spin" size={20} /> กำลังตรวจสอบ...</>
+                  <>
+                    <Loader2 className="animate-spin" size={20} /> กำลังตรวจสอบ...
+                  </>
                 ) : (
                   <>
                     เข้าสู่ระบบ <ArrowRight size={20} />
@@ -207,33 +204,22 @@ const AdminLoginPage = () => {
 
           {/* ---------------- VIEW: FORGOT PASSWORD ---------------- */}
           {view === "forgot" && (
-            <form
-              onSubmit={handleSubmitForgot(onForgotSubmit)}
-              className="space-y-6"
-            >
+            <form onSubmit={handleSubmitForgot(onForgotSubmit)} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  อีเมล (Email)
-                </label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">อีเมล (Email)</label>
                 <div className="relative">
-                  <Mail
-                    className={`absolute left-3 top-3 ${
-                      errorsForgot.email ? "text-red-500" : "text-gray-400"
-                    }`}
-                    size={20}
-                  />
-                  <input
-                    type="email"
-                    {...registerForgot("email")}
+                  <Mail className={`absolute left-3 top-3 ${errorsForgot.email ? 'text-red-500' : 'text-gray-400'}`} size={20} />
+                  <input 
+                    type="email" 
+                    {...registerForgot('email')}
                     placeholder="admin@example.com"
                     className={`w-full pl-10 p-3 rounded-lg border ${
-                      errorsForgot.email
-                        ? "border-red-500 focus:ring-red-200 bg-red-50"
-                        : "border-gray-300 focus:ring-blue-200"
+                      errorsForgot.email 
+                      ? 'border-red-500 focus:ring-red-200 bg-red-50' 
+                      : 'border-gray-300 focus:ring-blue-200'
                     } outline-none transition`}
                   />
                 </div>
-                {/* Error Message */}
                 {errorsForgot.email && (
                   <div className="flex items-center gap-1 mt-1 text-red-500 text-xs animate-pulse">
                     <AlertCircle size={12} />
@@ -242,17 +228,25 @@ const AdminLoginPage = () => {
                 )}
               </div>
 
-              {/* ... Buttons ... */}
+              {/* ปุ่มส่งฟอร์ม (ไม่หุ้ม Link) */}
               <button
                 type="submit"
-                disabled={isForgotSubmitting} // ใช้ตัวแปรที่ เพิ่มมาใหม่
-                className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 rounded-lg shadow transition disabled:opacity-70 flex items-center justify-center gap-2"
+                disabled={isForgotSubmitting}
+                className="w-full bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow-lg transition disabled:opacity-70"
               >
-               {isForgotSubmitting ? <Loader2 className="animate-spin" size={20} /> : "รีเซ็ตรหัสผ่าน"}
+                {isForgotSubmitting ? (
+                  <>
+                    <Loader2 className="animate-spin" size={18} /> กำลังส่ง...
+                  </>
+                ) : (
+                  <>รีเซ็ตรหัสผ่าน</>
+                )}
               </button>
+
+              {/* ปุ่มกลับเป็นปุ่มปกติที่เปลี่ยน view */}
               <button
                 type="button"
-                onClick={() => setView("login")}
+                onClick={() => setView('login')}
                 className="w-full text-gray-500 text-sm mt-2"
               >
                 กลับไปหน้าเข้าสู่ระบบ

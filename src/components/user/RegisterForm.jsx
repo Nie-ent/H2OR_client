@@ -332,16 +332,16 @@ const RegisterForm = () => {
                   register={register}
                   error={errors.addressType}
                   required
+                  disabled
+                  placeholder="เลือกประเภทที่อยู่"
                   options={[
-                    { label: "บ้านเดี่ยว", value: "house" },
-                    { label: "คอนโดมิเนียม", value: "condo" },
-                    { label: "ทาวน์โฮม", value: "townhome" },
-                    { label: "หอพัก/อพาร์ทเม้นท์", value: "apartment" },
+                    { label: "ที่อยู่ปัจจุบัน", value: "current" },
+                    { label: "ที่อยู่ตามทะเบียนบ้าน", value: "registered" }
                   ]}
                 />
 
-                <FormInput
-                  label="ที่อยู่ปัจจุบัน"
+                 <FormInput
+                  label="บ้านเลขที่"
                   name="address"
                   register={register}
                   error={errors.address}
