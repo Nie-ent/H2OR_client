@@ -56,10 +56,18 @@ const AdminLoginPage = () => {
   };
 
   const onForgotSubmit = async (data) => {
-    // ... Logic เดิม
-    toast.success("ส่งลิงก์รีเซ็ตแล้ว");
-    setView('login');
-  };
+    //mock ว่าระบบส่งลิงก์รีเซ็ตรหัสผ่านไปอีเมลแล้ว
+    toast.info("จำลองการส่งลิงก์รีเซ็ตไปที่อีเมล")
+    //เด้งไปหน้าforgot password
+    navigate("admin/forgotpassword", {
+      state : {email: data.email},
+    })
+  }
+  // const onForgotSubmit = async (data) => {
+  //   // ... Logic เดิม
+  //   toast.success("ส่งลิงก์รีเซ็ตแล้ว");
+  //   setView('login');
+  // };
 
   return (
     <div className="min-h-screen w-full bg-navy flex items-center justify-center p-4">
@@ -180,10 +188,11 @@ const AdminLoginPage = () => {
                     )}
                  </div>
                  {/* ... Buttons ... */}
-                 <button type="submit" className="w-full bg-yellow-500 text-white font-bold py-3 rounded-lg shadow">ส่งลิงก์รีเซ็ต</button>
-                 <button type="button" onClick={() => setView('login')} className="w-full text-gray-500 text-sm mt-2">กลับไปหน้าเข้าสู่ระบบ</button>
+                 <Link to="/admin/forgotpassword"><button type="submit" className="w-full bg-navy hover:bg-[#1a3b61] text-white font-bold py-3 rounded-lg shadow">ส่งลิงก์รีเซ็ต</button></Link>
+                 <Link to="/admin/login"><button type="button" onClick={() => setView('login')} className="w-full text-gray-500 text-sm mt-2">กลับไปหน้าเข้าสู่ระบบ</button></Link>
                </form>
             )}
+            
         </div>
       </div>
     </div>

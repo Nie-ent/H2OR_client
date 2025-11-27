@@ -7,6 +7,7 @@ import DashboardPage from "../pages/Admin/DashboardPage";
 import AdminLayout from "../layout/AdminLayout";
 import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
+import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
   {
     path: "/admin/login",
     element: <AdminLoginPage />,
+  },
+
+  {
+  path: "/admin/forgotpassword",
+  element: <AdminForgotPasswordPage />,
   },
 
   {

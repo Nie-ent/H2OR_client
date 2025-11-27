@@ -170,5 +170,18 @@ export const superAdminLoginSchema = z.object({
 // 6. Forgot Password Schema
 // ==========================================
 export const forgotPasswordSchema = z.object({
-  email: z.string().email(ERRORS.EMAIL_INVALID),
+  password: z
+    .string()
+    .min(6, ERRORS.PASSWORD_MIN)
+    .regex(PASSWORD_REGEX, ERRORS.PASSWORD_COMPLEXITY),
+  confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: ERRORS.PASSWORD_MISMATCH,
+  path: ["confirmPassword"],
 });
+
+
+// export const forgotPasswordSchema = z.object({
+//   email: z.string().email(ERRORS.EMAIL_INVALID),
+// });
+

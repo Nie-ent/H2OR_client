@@ -12,7 +12,7 @@ import Footer from "../../components/client/Footer";
 function LandingPage() {
   return (
 
-    <div className="min-h-screen bg-white flex flex-col justify-center items-center text-center p-4">
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center text-center">
       
       <div className="max-w-2xl space-y-6"></div>
 
