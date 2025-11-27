@@ -10,7 +10,7 @@ const NewsSection = () => {
     navigate("/apply");
   };
   const handleClickAdmin = () => {
-    navigate("/admin");
+    navigate("/admin/login");
   };
   return (
     <section className="w-full bg-gradient-to-br from-[#131e2d] to-[#3b5474] py-20 relative overflow-hidden">
