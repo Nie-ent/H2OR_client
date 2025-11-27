@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Upload, ArrowLeft, FileText, X } from "lucide-react";
 import { registerSchema } from "../../validations/validationSchema";
 
+
 // --- 1. Reusable UI Components (ควรแยกไฟล์ไปไว้ใน src/components/ui/forms/...) ---
 
 const Label = ({ children, required }) => (

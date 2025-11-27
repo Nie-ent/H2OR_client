@@ -54,11 +54,8 @@ export const registerSchema = z.object({
       (date) => new Date(date).toString() !== "Invalid Date",
       "กรุณาระบุวันเกิด"
     ),
-  age: z.preprocess(
-    (val) => parseInt(z.string().parse(val), 10),
-    z
-      .number({ invalid_type_error: ERRORS.NUMBER_ONLY })
-      .min(1, "กรุณาระบุอายุที่ถูกต้อง")
+  age: z.coerce.number({ invalid_type_error: ERRORS.NUMBER_ONLY })
+    .min(18, "อายุ 18 ปีบริบูรณ์ขึ้นไปเท่านั้น"
   ),
   gender: z.enum(["male", "female", "other"], {
     errorMap: () => ({ message: "กรุณาระบุเพศ" }),
@@ -79,11 +76,8 @@ export const registerSchema = z.object({
   position: z.string().min(4, "กรุณาระบุตำแหน่งที่ต้องการสมัคร"),
 
   // แปลงค่า input ที่ได้มาให้เป็น number ก่อน validate
-  expectedSalary: z.preprocess(
-    (a) => parseInt(z.string().parse(a), 10),
-    z
-      .number({ invalid_type_error: ERRORS.NUMBER_ONLY })
-      .min(1, "ระบุเงินเดือนที่คาดหวัง")
+  expectedSalary: z.coerce.number({ invalid_type_error: ERRORS.NUMBER_ONLY })
+      .min(10000, "กรุณาระบุเงินเดือนที่คาดหวัง"
   ),
 
   // --- ไฟล์แนบ (Resume) ---
