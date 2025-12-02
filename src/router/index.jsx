@@ -7,6 +7,7 @@ import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
 import QuizPage from "../pages/user/QuizPage";
 import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
+import WelcomeTestPage from "../pages/user/WelcomeTestPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
   {
     path: "/apply",
     element: <ApplicationResumePage />,
+  
+  },
+  {
+    path: "/welcome-test/:candidate_id",
+    element: <WelcomeTestPage />,
   },
 
   {

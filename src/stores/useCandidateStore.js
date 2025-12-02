@@ -11,6 +11,7 @@ export const useCandidateStore = create((set, get) => ({
 
   // 1. ฟังก์ชันสมัครงาน (POST)
   registerCandidate: async (candidateData) => {
+    console.log(candidateData)
     set({ isLoading: true, error: null }); // เริ่มโหลด Clear Error เดิม
 
     try {

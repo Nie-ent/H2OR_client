@@ -182,13 +182,9 @@ const RegisterForm = () => {
   }, [clearError, storeError]);
 
   const onSubmit = async (data) => {
-    setIsSubmitting(true);
+    // setIsSubmitting(true);  // ไม่ต้องใช้แล้วเพราะเราใช้ isLoading จาก store
     try {
-      // TODO: Replace with Axios call
-      // const formData = new FormData();
-      // Object.keys(data).forEach(key => formData.append(key, data[key]));
-      // await axios.post('/api/apply', formData);
-
+  
       // console.log("Submitting:", data);
       // await new Promise((resolve) => setTimeout(resolve, 1500)); // Mock API
 
@@ -199,17 +195,27 @@ const RegisterForm = () => {
       console.log("Submitting:", payload);
 
       // ✅ เรียก Action จาก Store
-      await registerCandidate(payload);
-
+      const result = await registerCandidate(payload);
+      
       toast.success("ส่งใบสมัครเรียบร้อยแล้ว!");
       reset();
-      navigate("/quiz"); // Redirect after success
+
+      // ✅ ดึง ID ของผู้สมัครจาก Response
+      console.log("Registration Result:", result);
+      
+      const candidateId = result?.data?.candidate_id || result?.candidate?.candidate_id || result?.candidate_id;
+
+      if (candidateId) {
+      // ✅  ส่งไปหน้า Welcome พร้อม ID
+        navigate(`/welcome-test/${candidateId}`); // Redirect after success
+      }
     } catch (error) {
       toast.error("เกิดข้อผิดพลาดในการส่งข้อมูล");
       console.error(error);
-    } finally {
-      setIsSubmitting(false);
     }
+    // } finally {
+    //   setIsSubmitting(false);
+    // }
   };
 
   return (
