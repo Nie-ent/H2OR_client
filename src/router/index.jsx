@@ -7,6 +7,7 @@ import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
 import QuizPage from "../pages/user/QuizPage";
 import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
+import JobApplicantInformation from "../pages/Admin/JobApplicantInformation";
 
 const router = createBrowserRouter([
   {
@@ -42,12 +43,18 @@ const router = createBrowserRouter([
         index: true,
         element: <DashboardPage />,
       },
+
       {
         path: "create-admin",
         element: <RegisterAdminPage />,
       },
+      {
+        path: "/admin/users",
+        element: < JobApplicantInformation/>,
+      },
     ],
   },
+  
   {
     path: "/quiz",
     element: <QuizPage />,
