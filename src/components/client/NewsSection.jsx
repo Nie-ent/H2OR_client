@@ -1,7 +1,8 @@
-import React from "react";
+//src/components/client/NewsSection.jsx
+
 import { useNavigate } from "react-router";
-import Notic from "../../assets/imge/notic.png";
 import Notictwo from "../../assets/imge/notic1.png";
+
 
 const NewsSection = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const NewsSection = () => {
     navigate("/apply");
   };
   const handleClickAdmin = () => {
-    navigate("/admin");
+    navigate("/admin/login");
   };
   return (
     <section className="w-full bg-gradient-to-br from-[#131e2d] to-[#3b5474] py-20 relative overflow-hidden">
@@ -29,10 +30,9 @@ const NewsSection = () => {
               className="relative w-full h-auto rounded-2xl shadow-2xl transform transition-transform duration-500 hover:scale-[1.02] hover:-translate-y-2 border border-white/10"
             />
           </div>
-          {/* --------------------------- */}
 
           <div>
-            <div className="inline-block bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10">
+            <div className="m-5 inline-block bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10">
               ข่าวสารและกิจกรรม
             </div>
             <h3 className="text-[#f1f3f4] text-[3rem] font-extrabold m-0 mb-6 leading-[1.2] drop-shadow-[0_2px_15px_rgba(0,0,0,0.2)]">
@@ -49,12 +49,13 @@ const NewsSection = () => {
               >
                 สมัครงาน
               </button>
+              
               {/* ปุมสำหรับ Admin ไว้ลบออกายหลัง*/}
               <button
                 onClick={handleClickAdmin}
                 className="btn-primary bg-[#f2b724] text-[#072c4d] py-4 px-8 border-none rounded-xl text-base font-bold cursor-pointer relative z-10"
               >
-                Admin
+                Admin Login
               </button>
             </div>
           </div>
