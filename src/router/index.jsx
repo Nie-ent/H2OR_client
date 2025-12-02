@@ -1,5 +1,3 @@
-//src/router/index.jsx
-
 import { createBrowserRouter } from "react-router-dom";
 import AdminLayout from "../layout/AdminLayout";
 import LandingPage from "../pages/Client/LandingPage";
@@ -8,6 +6,7 @@ import DashboardPage from "../pages/Admin/DashboardPage";
 import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
 import QuizPage from "../pages/user/QuizPage";
+import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -26,8 +25,8 @@ const router = createBrowserRouter([
   },
 
   {
-  path: "/admin/forgotpassword",
-  element: <AdminForgotPasswordPage />,
+    path: "/admin/forgotpassword",
+    element: <AdminForgotPasswordPage />,
   },
 
   {
@@ -50,8 +49,8 @@ const router = createBrowserRouter([
     ],
   },
   {
-     path: "/quiz",
-     element: <QuizPage />,
+    path: "/quiz",
+    element: <QuizPage />,
   },
 ]);
 
