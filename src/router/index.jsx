@@ -7,6 +7,7 @@ import DashboardPage from "../pages/Admin/DashboardPage";
 import AdminLayout from "../layout/AdminLayout";
 import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
+import QuizPage from "../pages/user/QuizPage";
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
     element: <AdminLayout />,
     children: [
       {
-        index: true, 
+        index: true,
         element: <DashboardPage />,
       },
       {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       // { path: 'users', element: <ManageUsersPage /> },
       // { path: 'settings', element: <SettingsPage /> },
     ],
+  },
+  {
+     path: "/quiz",
+     element: <QuizPage />,
   },
 ]);
 
