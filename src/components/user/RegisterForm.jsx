@@ -203,7 +203,7 @@ const RegisterForm = () => {
 
       toast.success("ส่งใบสมัครเรียบร้อยแล้ว!");
       reset();
-      navigate("/"); // Redirect after success
+      navigate("/quiz"); // Redirect after success
     } catch (error) {
       toast.error("เกิดข้อผิดพลาดในการส่งข้อมูล");
       console.error(error);
