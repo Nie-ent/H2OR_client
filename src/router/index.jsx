@@ -18,6 +18,11 @@ const router = createBrowserRouter([
   {
     path: "/apply",
     element: <ApplicationResumePage />,
+  
+  },
+  {
+    path: "/welcome-test/:candidate_id",
+    element: <WelcomeTestPage />,
   },
 
   {
