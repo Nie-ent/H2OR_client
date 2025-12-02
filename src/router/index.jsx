@@ -7,7 +7,7 @@ import ApplicationResumePage from "../pages/User/ApplicationResumePage";
 import DashboardPage from "../pages/Admin/DashboardPage";
 import RegisterAdminPage from "../pages/Admin/RegisterAdminPage";
 import AdminLoginPage from "../pages/Admin/AdminLoginPage";
-import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
+import QuizPage from "../pages/user/QuizPage";
 
 const router = createBrowserRouter([
   {
@@ -48,6 +48,10 @@ const router = createBrowserRouter([
         element: <RegisterAdminPage />,
       },
     ],
+  },
+  {
+     path: "/quiz",
+     element: <QuizPage />,
   },
 ]);
 
