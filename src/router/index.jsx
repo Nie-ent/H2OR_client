@@ -8,7 +8,7 @@ import AdminLoginPage from "../pages/Admin/AdminLoginPage";
 import QuizPage from "../pages/user/QuizPage";
 import AdminForgotPasswordPage from "../pages/Admin/AdminForgotPasswordPage";
 import JobApplicantInformation from "../pages/Admin/JobApplicantInformation";
-import WelcomeTestPage from "../pages/user/WelcomeTestPage";
+import WelcomeTestPage from "../pages/User/WelcomeTestPage";
 
 const router = createBrowserRouter([
   {
