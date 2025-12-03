@@ -1,7 +1,8 @@
 // src/components/admin/SideBar.jsx
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Users, Home, LayoutDashboard, UserPlus, Menu, X } from "lucide-react";
+
 
 const Sidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -90,7 +91,7 @@ const role = localStorage.getItem("role")
         {/* Menu List */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {/* 1. วนลูปเมนู Admin */}
-          {adminMenus.map((item) => (
+          {filteredMenus.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
