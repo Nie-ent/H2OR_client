@@ -55,14 +55,32 @@ const AdminLoginPage = () => {
   // ✅ 3. Login Handler (Clean & Modern)
   const onLoginSubmit = async (data) => {
     try {
-      const res = await axiosInstance.post("/auth/login", data);
+      const res = await axiosInstance.post("/login", data);
 
-      // บันทึกลง Store (Zustand จัดการ localStorage ให้เอง)
-      loginAction(res.data.user, res.data.token);
+      // 🔍 Debug: ดูโครงสร้างข้อมูลจริงใน Console (สำคัญมาก!)
+
+      // 2. ✅ แก้ไข: เจาะเข้าไปเอาข้อมูลให้ถูกชั้น (res.data.data)
+      const responseData = res.data.data || res.data; // กันเหนียวเผื่อโครงสร้างเปลี่ยน
+      const user = responseData.user;
+      const token = responseData.token;
+      const role = responseData.user.role
+
+        localStorage.setItem("token", token)
+        localStorage.setItem("role", role)
+      if (!user || !token) {
+        throw new Error("ไม่พบข้อมูลผู้ใช้งาน หรือ Token");
+      }
+
+      // บันทึกลง Store
 
       toast.success("เข้าสู่ระบบสำเร็จ!");
-      // ปรับ navigate ตามต้องการ (ถ้าต้องการไป dashboard ให้แก้เป็น /admin/dashboard)
-      navigate("/admin");
+
+      // เช็ค Role เพื่อ redirect (Optional)
+      if (role === "super_admin") {
+        navigate("/admin/users");
+      } else {
+        navigate("/admin");
+      }
     } catch (error) {
       const msg =
         error.response?.data?.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
@@ -182,7 +200,8 @@ const AdminLoginPage = () => {
               >
                 {isLoginSubmitting ? (
                   <>
-                    <Loader2 className="animate-spin" size={20} /> กำลังตรวจสอบ...
+                    <Loader2 className="animate-spin" size={20} />{" "}
+                    กำลังตรวจสอบ...
                   </>
                 ) : (
                   <>
@@ -204,19 +223,29 @@ const AdminLoginPage = () => {
 
           {/* ---------------- VIEW: FORGOT PASSWORD ---------------- */}
           {view === "forgot" && (
-            <form onSubmit={handleSubmitForgot(onForgotSubmit)} className="space-y-6">
+            <form
+              onSubmit={handleSubmitForgot(onForgotSubmit)}
+              className="space-y-6"
+            >
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">อีเมล (Email)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  อีเมล (Email)
+                </label>
                 <div className="relative">
-                  <Mail className={`absolute left-3 top-3 ${errorsForgot.email ? 'text-red-500' : 'text-gray-400'}`} size={20} />
-                  <input 
-                    type="email" 
-                    {...registerForgot('email')}
+                  <Mail
+                    className={`absolute left-3 top-3 ${
+                      errorsForgot.email ? "text-red-500" : "text-gray-400"
+                    }`}
+                    size={20}
+                  />
+                  <input
+                    type="email"
+                    {...registerForgot("email")}
                     placeholder="admin@example.com"
                     className={`w-full pl-10 p-3 rounded-lg border ${
-                      errorsForgot.email 
-                      ? 'border-red-500 focus:ring-red-200 bg-red-50' 
-                      : 'border-gray-300 focus:ring-blue-200'
+                      errorsForgot.email
+                        ? "border-red-500 focus:ring-red-200 bg-red-50"
+                        : "border-gray-300 focus:ring-blue-200"
                     } outline-none transition`}
                   />
                 </div>
@@ -246,7 +275,7 @@ const AdminLoginPage = () => {
               {/* ปุ่มกลับเป็นปุ่มปกติที่เปลี่ยน view */}
               <button
                 type="button"
-                onClick={() => setView('login')}
+                onClick={() => setView("login")}
                 className="w-full text-gray-500 text-sm mt-2"
               >
                 กลับไปหน้าเข้าสู่ระบบ

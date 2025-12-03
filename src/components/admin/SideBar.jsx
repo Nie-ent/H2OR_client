@@ -1,21 +1,52 @@
 // src/components/admin/SideBar.jsx
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Users, Home, LayoutDashboard, UserPlus, Menu, X } from "lucide-react";
+
 
 const Sidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
+  // 2. Config: แยก Data ออกจาก UI เพื่อให้ดูแลง่าย
+const role = localStorage.getItem("role")
+  // กันโค้ด error : ถ้าไม่มี user ให้เป็น string ว่าง หรือ guest
+  const currentRole = role || "";
 
-  const adminMenus = [
-    { label: "หน้าหลัก", path: "/admin", icon: LayoutDashboard, end: true },
-    { label: "สร้างผู้ดูแลระบบ", path: "/admin/create-admin", icon: UserPlus },
-    { label: "ผู้สมัครงาน", path: "/admin/users", icon: Users },
-  ];
+  const adminMenus = useMemo(() => [
+      {
+        label: "หน้าหลัก",
+        path: "/admin",
+        icon: LayoutDashboard,
+        end: true, // ใช้ prop นี้เพื่อให้ Active เฉพาะ path นี้เป๊ะๆ ไม่รวม sub-path
+        allowedRoles: ["super_admin", "admin"], //  เห็นได้ทั้งคู่
+      },
+      {
+        label: "สร้างผู้ดูแลระบบ",
+        path: "/admin/create-admin",
+        icon: UserPlus,
+        allowedRoles: ["super_admin"], // ✅ เฉพาะ Super Admin เท่านั้น
+      },
+      {
+        label: "ผู้สมัครงาน",
+        path: "/admin/users",
+        icon: Users,
+        allowedRoles: ["super_admin", "admin"], // เห็นได้ทั้งคู่
+      },
+    ],
+    []
+  );
 
-  const baseLinkClass = "flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer duration-200";
+  // 4. Logic Filter: กรองเมนูตาม Role
+  const filteredMenus = adminMenus.filter(item =>
+    item.allowedRoles?.includes(currentRole)
+  );
+
+  // Base Style: แยก Class พื้นฐานออกมาเพื่อให้แก้ที่เดียวจบ
+  const baseLinkClass =
+    "flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer duration-200";
+  // Class สำหรับตอน Active และ Inactive
   const activeClass = "bg-blue-700 text-white shadow-md";
   const inactiveClass = "text-gray-400 hover:text-white hover:bg-white/5";
 
@@ -60,7 +91,7 @@ const Sidebar = () => {
         {/* Menu List */}
         <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
           {/* 1. วนลูปเมนู Admin */}
-          {adminMenus.map((item) => (
+          {filteredMenus.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
