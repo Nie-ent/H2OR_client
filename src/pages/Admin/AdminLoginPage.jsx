@@ -57,21 +57,22 @@ const AdminLoginPage = () => {
     try {
       const res = await axiosInstance.post("/login", data);
 
-      // 🔍 Debug: ดูโครงสร้างข้อมูลจริงใน Console (สำคัญมาก!)
-
       // 2. ✅ แก้ไข: เจาะเข้าไปเอาข้อมูลให้ถูกชั้น (res.data.data)
       const responseData = res.data.data || res.data; // กันเหนียวเผื่อโครงสร้างเปลี่ยน
       const user = responseData.user;
       const token = responseData.token;
       const role = responseData.user.role
+      
+      // บันทึกลง Store
+      localStorage.setItem("token", token)
+      localStorage.setItem("role", role)
 
-        localStorage.setItem("token", token)
-        localStorage.setItem("role", role)
       if (!user || !token) {
         throw new Error("ไม่พบข้อมูลผู้ใช้งาน หรือ Token");
       }
 
-      // บันทึกลง Store
+       // 🔍 Debug: ดูโครงสร้างข้อมูลจริงใน Console (สำคัญมาก!)
+      console.log("Logged in as:", role)
 
       toast.success("เข้าสู่ระบบสำเร็จ!");
 
