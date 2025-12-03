@@ -35,7 +35,7 @@ const EvaluationModal = ({ isOpen, onClose, onSave, candidate }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-fade-in">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden animate-slide-up">
         {/* Header */}
-        <div className="bg-[#28a745] p-5 border-b border-gray-200">
+        <div className="bg-[#072c4d] p-5 border-b border-gray-200">
           <h3 className="text-white text-xl font-bold">
             📝 ประเมินผลการสัมภาษณ์
           </h3>

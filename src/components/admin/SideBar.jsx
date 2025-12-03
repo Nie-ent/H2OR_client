@@ -59,35 +59,68 @@ const Sidebar = () => {
         </span> 
       </div>
 
-      {/* Menu List */}
-      <nav className="flex-1 p-4 space-y-2">
-        {/* 3. Mapping: วนลูปสร้างเมนู ลดโค้ดซ้ำซ้อน */}
-        {adminMenus.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            end={item.end} // สำคัญ: เพื่อไม่ให้หน้า Dashboard Active ค้างเมื่อเข้าหน้าย่อย
-            className={({ isActive }) =>
-              `${baseLinkClass} ${isActive ? activeClass : inactiveClass}`
-            }
-          >
-            <item.icon size={20} />
-            <span className="font-medium">{item.label}</span>
-          </NavLink>
-        ))}
-      </nav>
+      {/* --- Mobile Overlay --- */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={closeMenu} 
+        />
+      )}
 
-      {/* Footer / Back to Home */}
-      <div className="p-4 border-t border-gray-700">
-        <Link
-          to="/"
-          className={`${baseLinkClass} text-gray-400 hover:text-red-400 hover:bg-red-500/10`}
-        >
-          <Home size={20} />
-          <span className="font-medium">กลับหน้าหลัก</span>
-        </Link>
-      </div>
-    </aside>
+      {/* --- Sidebar Container --- */}
+      <aside 
+        className={`
+          bg-navy text-white w-64 h-screen font-sans flex flex-col
+          fixed top-0 left-0 z-50 
+          transition-transform duration-300 ease-in-out
+          ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} 
+          md:translate-x-0 md:static md:sticky 
+        `}
+      >
+        {/* Header */}
+        <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center justify-between tracking-wide">
+          <span className="flex items-center gap-2">H2OR Admin</span>
+          <button onClick={closeMenu} className="md:hidden text-gray-400 hover:text-white">
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Menu List */}
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          {/* 1. วนลูปเมนู Admin */}
+          {adminMenus.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              end={item.end}
+              onClick={closeMenu}
+              className={({ isActive }) =>
+                `${baseLinkClass} ${isActive ? activeClass : inactiveClass}`
+              }
+            >
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </NavLink>
+          ))}
+
+          {/* เส้นคั่นบางๆ เพื่อแยกส่วน */}
+          <div className="border-t border-gray-700 my-2 pt-2"></div>
+
+          {/* 2. เมนู "กลับหน้าหลัก" (นำมารวมใน Nav เลย) */}
+          <Link
+            to="/"
+            onClick={closeMenu}
+            className={`${baseLinkClass} text-gray-400 hover:text-red-400 hover:bg-red-500/10`}
+          >
+            <Home size={20} />
+            <span className="font-medium">กลับหน้าหลัก</span>
+          </Link>
+        </nav>
+
+        {/* ตัดส่วน Footer ด้านล่างทิ้ง หรือเก็บไว้ใส่ Version App แทนได้ */}
+        {/* <div className="p-4 border-t border-gray-700 mt-auto"> ... </div> */}
+      </aside>
+    </>
   );
 };
 
