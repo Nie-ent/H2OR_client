@@ -7,10 +7,9 @@ import { useAuthStore } from "../../stores/useAuthStore";
 
 const Sidebar = () => {
   // 2. Config: แยก Data ออกจาก UI เพื่อให้ดูแลง่าย
-  const user = useAuthStore((state) => state.user);
-
+const role = localStorage.getItem("role")
   // กันโค้ด error : ถ้าไม่มี user ให้เป็น string ว่าง หรือ guest
-  const currentRole = user?.role || "";
+  const currentRole = role || "";
 
   const adminMenus = useMemo(() => [
       {
@@ -18,7 +17,7 @@ const Sidebar = () => {
         path: "/admin",
         icon: LayoutDashboard,
         end: true, // ใช้ prop นี้เพื่อให้ Active เฉพาะ path นี้เป๊ะๆ ไม่รวม sub-path
-        allowedRole: ["super_admin", "admin"], //  เห็นได้ทั้งคู่
+        allowedRoles: ["super_admin", "admin"], //  เห็นได้ทั้งคู่
       },
       {
         label: "สร้างผู้ดูแลระบบ",
@@ -52,7 +51,8 @@ const Sidebar = () => {
     <aside className="w-64 bg-navy text-white hidden md:flex flex-col h-screen sticky top-0 font-sans">
       {/* Header */}
       <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center gap-2 tracking-wide">
-        H2OR Admin
+        <span>H2OR Admin</span>
+
            {/* แสดง Role ให้เห็นชัดๆ (Optional) */}
         <span className="text-xs text-gray-400 font-normal uppercase px-2 py-0.5 bg-gray-800 rounded w-fit">
           {currentRole.replace('_', ' ')}
@@ -62,7 +62,7 @@ const Sidebar = () => {
       {/* Menu List */}
       <nav className="flex-1 p-4 space-y-2">
         {/* 3. Mapping: วนลูปสร้างเมนู ลดโค้ดซ้ำซ้อน */}
-        {adminMenus.map((item) => (
+        {filteredMenus.map((item) => (
           <NavLink
             key={item.path}
             to={item.path}
