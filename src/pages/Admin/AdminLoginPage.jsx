@@ -55,14 +55,14 @@ const AdminLoginPage = () => {
   // ✅ 3. Login Handler (Clean & Modern)
   const onLoginSubmit = async (data) => {
     try {
-      const res = await axiosInstance.post("/admin/login", data);
+      const res = await axiosInstance.post("/auth/login", data);
 
       // บันทึกลง Store (Zustand จัดการ localStorage ให้เอง)
       loginAction(res.data.user, res.data.token);
 
       toast.success("เข้าสู่ระบบสำเร็จ!");
       // ปรับ navigate ตามต้องการ (ถ้าต้องการไป dashboard ให้แก้เป็น /admin/dashboard)
-      navigate("/admin/login");
+      navigate("/admin");
     } catch (error) {
       const msg =
         error.response?.data?.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
