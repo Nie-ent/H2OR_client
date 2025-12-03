@@ -1,65 +1,50 @@
-// src/components/admin/SideBar.jsx
-
 import { useMemo } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { Users, Home, LayoutDashboard, UserPlus } from "lucide-react";
+import { Users, Home, LayoutDashboard, UserPlus, X } from "lucide-react"; // เพิ่ม X
 import { useAuthStore } from "../../stores/useAuthStore";
 
-const Sidebar = () => {
-  // 2. Config: แยก Data ออกจาก UI เพื่อให้ดูแลง่าย
+// รับ props isMobileMenuOpen และ closeMenu เพื่อจัดการ Responsive
+const Sidebar = ({ isMobileMenuOpen, closeMenu }) => {
   const user = useAuthStore((state) => state.user);
-
-  // กันโค้ด error : ถ้าไม่มี user ให้เป็น string ว่าง หรือ guest
   const currentRole = user?.role || "";
 
+  // 1. Config: แก้ไขชื่อ key ให้เป็น allowedRoles (มี s) เหมือนกันทุกอัน
   const adminMenus = useMemo(() => [
       {
         label: "หน้าหลัก",
         path: "/admin",
         icon: LayoutDashboard,
-        end: true, // ใช้ prop นี้เพื่อให้ Active เฉพาะ path นี้เป๊ะๆ ไม่รวม sub-path
-        allowedRole: ["super_admin", "admin"], //  เห็นได้ทั้งคู่
+        end: true, 
+        allowedRoles: ["super_admin", "admin"], // แก้จาก allowedRole เป็น allowedRoles
       },
       {
         label: "สร้างผู้ดูแลระบบ",
         path: "/admin/create-admin",
         icon: UserPlus,
-        allowedRoles: ["super_admin"], // ✅ เฉพาะ Super Admin เท่านั้น
+        allowedRoles: ["super_admin"], 
       },
       {
         label: "ผู้สมัครงาน",
         path: "/admin/users",
         icon: Users,
-        allowedRoles: ["super_admin", "admin"], // เห็นได้ทั้งคู่
+        allowedRoles: ["super_admin", "admin"], 
       },
     ],
     []
   );
 
-  // 4. Logic Filter: กรองเมนูตาม Role
+  // 2. Logic Filter: กรองเมนูตาม Role
   const filteredMenus = adminMenus.filter(item =>
     item.allowedRoles?.includes(currentRole)
   );
 
-  // Base Style: แยก Class พื้นฐานออกมาเพื่อให้แก้ที่เดียวจบ
-  const baseLinkClass =
-    "flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer duration-200";
-  // Class สำหรับตอน Active และ Inactive
+  const baseLinkClass = "flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer duration-200";
   const activeClass = "bg-blue-700 text-white shadow-md";
   const inactiveClass = "text-gray-400 hover:text-white hover:bg-white/5";
 
   return (
-    <aside className="w-64 bg-navy text-white hidden md:flex flex-col h-screen sticky top-0 font-sans">
-      {/* Header */}
-      <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center gap-2 tracking-wide">
-        H2OR Admin
-           {/* แสดง Role ให้เห็นชัดๆ (Optional) */}
-        <span className="text-xs text-gray-400 font-normal uppercase px-2 py-0.5 bg-gray-800 rounded w-fit">
-          {currentRole.replace('_', ' ')}
-        </span> 
-      </div>
-
-      {/* --- Mobile Overlay --- */}
+    <>
+      {/* --- Mobile Overlay (Background สีดำจางๆ เวลาเปิดเมนูบนมือถือ) --- */}
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -67,33 +52,41 @@ const Sidebar = () => {
         />
       )}
 
-      {/* --- Sidebar Container --- */}
+      {/* --- Sidebar Container (รวมเหลืออันเดียว) --- */}
       <aside 
         className={`
-          bg-navy text-white w-64 h-screen font-sans flex flex-col
-          fixed top-0 left-0 z-50 
+          bg-[#072c4d] text-white w-64 h-screen font-sans flex flex-col
+          fixed top-0 left-0 z-50 border-r border-gray-700
           transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0 md:static md:sticky 
+          md:translate-x-0 md:sticky 
         `}
       >
         {/* Header */}
-        <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center justify-between tracking-wide">
-          <span className="flex items-center gap-2">H2OR Admin</span>
-          <button onClick={closeMenu} className="md:hidden text-gray-400 hover:text-white">
-            <X size={20} />
+        <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center justify-between tracking-wide h-[72px]">
+          <div className="flex flex-col">
+            <span className="flex items-center gap-2">H2OR Admin</span>
+            {/* แสดง Role (Optional) */}
+            <span className="text-[10px] text-gray-400 font-normal uppercase mt-1">
+              {currentRole.replace('_', ' ')}
+            </span>
+          </div>
+          
+          {/* ปุ่มปิดบนมือถือ */}
+          <button onClick={closeMenu} className="md:hidden text-gray-400 hover:text-white p-1">
+            <X size={24} />
           </button>
         </div>
 
         {/* Menu List */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
-          {/* 1. วนลูปเมนู Admin */}
-          {adminMenus.map((item) => (
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
+          {/* 3. ใช้ filteredMenus ในการ Render แทน adminMenus */}
+          {filteredMenus.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               end={item.end}
-              onClick={closeMenu}
+              onClick={closeMenu} // ปิดเมนูเมื่อคลิกเลือก (Mobile)
               className={({ isActive }) =>
                 `${baseLinkClass} ${isActive ? activeClass : inactiveClass}`
               }
@@ -103,10 +96,9 @@ const Sidebar = () => {
             </NavLink>
           ))}
 
-          {/* เส้นคั่นบางๆ เพื่อแยกส่วน */}
           <div className="border-t border-gray-700 my-2 pt-2"></div>
 
-          {/* 2. เมนู "กลับหน้าหลัก" (นำมารวมใน Nav เลย) */}
+          {/* ปุ่มกลับหน้าหลัก */}
           <Link
             to="/"
             onClick={closeMenu}
@@ -116,9 +108,11 @@ const Sidebar = () => {
             <span className="font-medium">กลับหน้าหลัก</span>
           </Link>
         </nav>
-
-        {/* ตัดส่วน Footer ด้านล่างทิ้ง หรือเก็บไว้ใส่ Version App แทนได้ */}
-        {/* <div className="p-4 border-t border-gray-700 mt-auto"> ... </div> */}
+        
+        {/* Version หรือ Footer เล็กๆ (Optional) */}
+        <div className="p-4 text-xs text-gray-500 text-center">
+            v1.0.0
+        </div>
       </aside>
     </>
   );
