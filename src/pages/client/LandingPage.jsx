@@ -1,28 +1,28 @@
-//src/pages/client/LandingPage.jsx
+// src/pages/client/LandingPage.jsx
 
-import Navbar from "../../components/client/Navbar";
+import Footer from "../../components/client/Footer";
 import Hero from "../../components/client/Hero";
+import Navbar from "../../components/client/Navbar";
 import NewsSection from "../../components/client/NewsSection";
 import Services from "../../components/client/Services";
-import Footer from "../../components/client/Footer";
-
 
 // --- Main App Component ---
 function LandingPage() {
   return (
-
-    <div className="min-h-screen bg-white flex flex-col justify-center items-center text-center">
-      
-      <div className="max-w-2xl space-y-6"></div>
-
-    <div className="w-full min-h-screen font-['Kanit']">
+    // 1. Wrapper หลัก: กำหนด font, สีพื้นหลัง และใช้ flex-col เพื่อจัดการ Footer
+    <div className="min-h-screen bg-white font-['Kanit'] flex flex-col overflow-x-hidden">
+      {/* Navbar อยู่ด้านบนสุด */}
       <Navbar />
-      <Hero />
-      <NewsSection />
-      <Services />
-      <Footer />
 
-    </div>
+      {/* 2. Main Content: ใช้ flex-grow เพื่อดัน Footer ลงล่างสุดถ้าเนื้อหาน้อย */}
+      <main className="flex-grow w-full">
+        <Hero />
+        <NewsSection />
+        <Services />
+      </main>
+
+      {/* Footer อยู่ด้านล่างสุด */}
+      <Footer />
     </div>
   );
 }
