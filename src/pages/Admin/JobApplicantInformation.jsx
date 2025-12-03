@@ -8,9 +8,17 @@ import EvaluationModal from "../../components/admin/EvaluationModal";
 import ActionFooter from "../../components/admin/ActionFooter";
 import { getPositionName } from "../../utils/formatters";
 import FilterBar from "../../components/admin/FilterBar";
+import { useAdminCandidateStore } from "../../stores/useAdminCandidateStore";
 
 
 const JobApplicantInformation = ({ candidates = initialCandidates }) => {
+  // --- ใช้ store admin ---
+  const {
+    candidates: storeCandidates,
+    fetchCandidates,
+    createCandidate,
+  } = useAdminCandidateStore();
+
   // --- 1. State Management ---
   const [allCandidates, setAllCandidates] = useState(candidates);
   const [selectedItems, setSelectedItems] = useState(new Set());
@@ -19,7 +27,19 @@ const JobApplicantInformation = ({ candidates = initialCandidates }) => {
   const [modals, setModals] = useState({ add: false, interview: false, eval: false });
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  useEffect(() => setAllCandidates(candidates), [candidates]);
+  // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
+  useEffect(() => {
+    fetchCandidates();
+  }, [fetchCandidates]);
+
+  // ถ้า store มีข้อมูล ใช้ของจริงจาก backend แทน initialCandidates
+  useEffect(() => {
+    if (storeCandidates && storeCandidates.length > 0) {
+      setAllCandidates(storeCandidates);
+    } else {
+      setAllCandidates(candidates);
+    }
+  }, [storeCandidates, candidates]);
 
   // --- 2. Filter Logic ---
   const filteredCandidates = useMemo(() => {
@@ -44,9 +64,16 @@ const JobApplicantInformation = ({ candidates = initialCandidates }) => {
     setSelectedCandidate(null);
   };
 
-  const handleSaveCandidate = (newData) => {
-    const newCandidate = { id: Date.now(), ...newData, positionName: getPositionName(newData.position) };
-    handleUpdateCandidate([newCandidate, ...allCandidates]);
+  // แก้ตรงนี้ให้ยิง API แทน fake เพิ่มใน state อย่างเดียว
+  const handleSaveCandidate = async (formData) => {
+    try {
+      await createCandidate(formData); // POST ไป backend
+      await fetchCandidates();         // ดึงข้อมูลล่าสุดกลับมา
+      setModals({ ...modals, add: false });
+    } catch (err) {
+      console.error(err);
+      alert("เพิ่มผู้สมัครงานไม่สำเร็จ");
+    }
   };
 
   const handleSaveInterview = (data) => {
