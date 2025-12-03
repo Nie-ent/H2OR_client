@@ -1,58 +1,19 @@
 // src/components/admin/SideBar.jsx
-
-import { useMemo } from "react";
+import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-// เพิ่มไอคอนใหม่: Briefcase(งาน), FileQuestion(แบบทดสอบ), Banknote(สินเชื่อ)
-import { 
-  Users, 
-  Home, 
-  LayoutDashboard, 
-  UserPlus, 
-  X, 
-  Briefcase, 
-  FileQuestion, 
-  Banknote 
-} from "lucide-react";
-import { useAuthStore } from "../../stores/useAuthStore";
+import { Users, Home, LayoutDashboard, UserPlus, Menu, X } from "lucide-react";
 
-const Sidebar = ({ isMobileMenuOpen, closeMenu }) => {
-  const user = useAuthStore((state) => state.user);
-  const currentRole = user?.role || "";
+const Sidebar = () => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const adminMenus = useMemo(() => [
-      {
-        label: "หน้าหลัก (Dashboard)",
-        path: "/admin",
-        icon: LayoutDashboard,
-        end: true, 
-        allowedRoles: ["super_admin", "admin"],
-      },
-      {
-        label: "ผู้สมัครงาน", // หน้ารวม Candidate
-        path: "/admin/users",
-        icon: Users,
-        allowedRoles: ["super_admin", "admin"],
-      },
-      // {
-      //   label: "แบบทดสอบ (Quiz)", // เคยทำส่วน Screening Quiz
-      //   path: "/admin/quizzes",
-      //   icon: FileQuestion,
-      //   allowedRoles: ["super_admin", "admin"],
-      // },
-      {
-        label: "สร้างผู้ดูแลระบบ",
-        path: "/admin/create-admin",
-        icon: UserPlus,
-        allowedRoles: ["super_admin"], // ✅ เฉพาะ Super Admin
-      },
-    ],
-    []
-  );
+  const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
+  const closeMenu = () => setIsMobileMenuOpen(false);
 
-  // Logic กรองเมนูตาม Role
-  const filteredMenus = adminMenus.filter(item =>
-    item.allowedRoles?.includes(currentRole)
-  );
+  const adminMenus = [
+    { label: "หน้าหลัก", path: "/admin", icon: LayoutDashboard, end: true },
+    { label: "สร้างผู้ดูแลระบบ", path: "/admin/create-admin", icon: UserPlus },
+    { label: "ผู้สมัครงาน", path: "/admin/users", icon: Users },
+  ];
 
   const baseLinkClass = "flex items-center gap-3 p-3 rounded-lg transition-colors cursor-pointer duration-200";
   const activeClass = "bg-blue-700 text-white shadow-md";
@@ -60,7 +21,17 @@ const Sidebar = ({ isMobileMenuOpen, closeMenu }) => {
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* --- Mobile Trigger Button (ขวาบน & สีจาง) --- */}
+      <div className="md:hidden fixed top-4 right-4 z-50">
+        <button
+          onClick={toggleMenu}
+          className="p-2 bg-white/60 backdrop-blur-sm border border-gray-200 text-gray-500 rounded-md shadow-sm hover:bg-white hover:text-blue-900 transition-all"
+        >
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* --- Mobile Overlay --- */}
       {isMobileMenuOpen && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
@@ -68,31 +39,27 @@ const Sidebar = ({ isMobileMenuOpen, closeMenu }) => {
         />
       )}
 
-      {/* Sidebar Container */}
+      {/* --- Sidebar Container --- */}
       <aside 
         className={`
-          bg-[#072c4d] text-white w-64 h-screen font-sans flex flex-col
-          fixed top-0 left-0 z-50 border-r border-gray-700
+          bg-navy text-white w-64 h-screen font-sans flex flex-col
+          fixed top-0 left-0 z-50 
           transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0 md:sticky 
+          md:translate-x-0 md:static md:sticky 
         `}
       >
         {/* Header */}
-        <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center justify-between tracking-wide h-[72px]">
-          <div className="flex flex-col">
-            <span className="flex items-center gap-2">H2OR Admin</span>
-            <span className="text-[10px] text-gray-400 font-normal uppercase mt-1">
-              {currentRole.replace('_', ' ')}
-            </span>
-          </div>
-          <button onClick={closeMenu} className="md:hidden text-gray-400 hover:text-white p-1">
-            <X size={24} />
+        <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center justify-between tracking-wide">
+          <span className="flex items-center gap-2">H2OR Admin</span>
+          <button onClick={closeMenu} className="md:hidden text-gray-400 hover:text-white">
+            <X size={20} />
           </button>
         </div>
 
         {/* Menu List */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto custom-scrollbar">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+          {/* 1. วนลูปเมนู Admin */}
           {adminMenus.map((item) => (
             <NavLink
               key={item.path}
@@ -108,9 +75,10 @@ const Sidebar = ({ isMobileMenuOpen, closeMenu }) => {
             </NavLink>
           ))}
 
+          {/* เส้นคั่นบางๆ เพื่อแยกส่วน */}
           <div className="border-t border-gray-700 my-2 pt-2"></div>
 
-          {/* ปุ่มกลับหน้าหลัก */}
+          {/* 2. เมนู "กลับหน้าหลัก" (นำมารวมใน Nav เลย) */}
           <Link
             to="/"
             onClick={closeMenu}
@@ -120,6 +88,9 @@ const Sidebar = ({ isMobileMenuOpen, closeMenu }) => {
             <span className="font-medium">กลับหน้าหลัก</span>
           </Link>
         </nav>
+
+        {/* ตัดส่วน Footer ด้านล่างทิ้ง หรือเก็บไว้ใส่ Version App แทนได้ */}
+        {/* <div className="p-4 border-t border-gray-700 mt-auto"> ... </div> */}
       </aside>
     </>
   );
