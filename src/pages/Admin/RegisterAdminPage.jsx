@@ -216,29 +216,6 @@ const RegisterAdminPage = () => {
 
         <hr className="border-gray-100" />
 
-        {/* --- ส่วนที่ 3: บทบาท (Role) --- */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            กำหนดบทบาท (Role) <span className="text-red-500">*</span>
-          </label>
-          <div className="relative">
-            <select
-              {...register("role")}
-              className={`w-full p-2.5 rounded-lg border bg-white ${
-                errors.role ? "border-red-500" : "border-gray-300"
-              } focus:ring-2 focus:ring-blue-200 outline-none cursor-pointer`}
-            >
-              <option value="">-- กรุณาเลือกบทบาท --</option>
-              <option value="admin">Admin (ผู้ดูแลทั่วไป)</option>
-              <option value="super_admin">
-                Super Admin (ผู้ดูแลระบบสูงสุด)
-              </option>
-            </select>
-          </div>
-          {errors.role && (
-            <p className="text-red-500 text-xs mt-1">{errors.role.message}</p>
-          )}
-        </div>
 
         {/* Submit Button */}
         <div className="flex justify-end pt-4">
