@@ -102,7 +102,7 @@ export const interviews = [
 ];
 
 export const statusColors = {
-    pending: 'bg-[#072c4d]',
+    pending: 'bg-[#f2b724]',
     interview: 'bg-[#3b5474]',
     passed: 'bg-[#28a745]',
     rejected: 'bg-[#dc3545]'
