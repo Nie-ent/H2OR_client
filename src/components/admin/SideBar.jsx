@@ -120,7 +120,7 @@ const Sidebar = () => {
         {/* ตัดส่วน Footer ด้านล่างทิ้ง หรือเก็บไว้ใส่ Version App แทนได้ */}
         {/* <div className="p-4 border-t border-gray-700 mt-auto"> ... </div> */}
       </aside>
-    </>
+    </aside>
   );
 };
 
