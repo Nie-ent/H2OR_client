@@ -4,7 +4,7 @@ import axios from "axios";
 
 // สร้าง instance
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api/candidates", // เปลี่ยนเป็น URL ของ backend จริง
+  baseURL: "http://localhost:8000/api", // เปลี่ยนเป็น URL ของ backend จริง
 });
 
 // Request Interceptor → แนบ Token อัตโนมัติ
@@ -31,5 +31,6 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
 
 export default axiosInstance;
