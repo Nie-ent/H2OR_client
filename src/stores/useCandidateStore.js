@@ -9,20 +9,56 @@ export const useCandidateStore = create((set, get) => ({
 
   // REGISTER - create candidate (รองรับไฟล์ถ้าจะส่ง FormData ใน onSave)
   registerCandidate: async (candidateData) => {
-    set({ isLoading: true, error: null });
+    console.log(candidateData)
+    set({ isLoading: true, error: null }); // เริ่มโหลด Clear Error เดิม
+
     try {
-      // candidateData อาจเป็น plain object หรือ FormData (ถ้าส่งไฟล์)
-      const headers = candidateData instanceof FormData ? { "Content-Type": "multipart/form-data" } : {};
-      const response = await api.post("/", candidateData, { headers });
+      // ⚡ ยิง Axios ตรงนี้เลย (ไม่ต้องเรียก Service)
+      // url คือ "/" เพราะ baseURL ใน axiosCandidate เป็น .../api/candidates แล้ว
+      const response = await api.post("/", candidateData);
+      console.log("response", response);
 
-      // ปรับให้ return data ที่ backend ส่ง (map ถ้าจำเป็น)
-      const payload = response.data?.data ?? response.data;
       set({ isLoading: false });
-
-      return payload;
+      return response.data; // ส่ง data กลับไปให้ UI (เผื่อเอาไปทำอะไรต่อ)
     } catch (error) {
+      // ดึงข้อความ Error จาก Backend
       const errorMessage = error.response?.data?.message || "การสมัครล้มเหลว";
-      set({ isLoading: false, error: errorMessage });
+
+      set({
+        isLoading: false,
+        error: errorMessage,
+      });
+
+      throw error; // โยน error ออกไปเพื่อให้ UI (RegisterForm) รู้และ Toast แจ้งเตือนได้
+    }
+  },
+  applicationReseme: async (params, pdfFile) => {
+    console.log("params", params);
+    set({ isLoading: true, error: null });
+
+    try {
+      const formData = new FormData();
+      formData.append("pdf", pdfFile); // ต้องชื่อ pdf เท่านั้น
+
+      const response = await api.post(`/${params}/documents`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("response", response);
+
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "การอัปโหลดเอกสารล้มเหลว";
+
+      set({
+        isLoading: false,
+        error: errorMessage,
+      });
+
       throw error;
     }
   },

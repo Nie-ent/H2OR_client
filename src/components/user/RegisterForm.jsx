@@ -9,6 +9,7 @@ import { Upload, ArrowLeft, FileText, X } from "lucide-react";
 import { registerSchema } from "../../validations/validationSchema";
 import { useCandidateStore } from "../../stores/useCandidateStore";
 
+
 // --- 1. Reusable UI Components (ควรแยกไฟล์ไปไว้ใน src/components/ui/forms/...) ---
 
 const Label = ({ children, required }) => (
@@ -35,11 +36,10 @@ const FormInput = ({
       type={type}
       placeholder={placeholder}
       {...register(name)}
-      className={`w-full p-2.5 rounded-lg border ${
-        error
-          ? "border-red-500 focus:ring-red-200"
-          : "border-gray-300 focus:ring-blue-200"
-      } focus:border-blue-500 focus:outline-none transition-all`}
+      className={`w-full p-2.5 rounded-lg border ${error
+        ? "border-red-500 focus:ring-red-200"
+        : "border-gray-300 focus:ring-blue-200"
+        } focus:border-blue-500 focus:outline-none transition-all`}
     />
     <ErrorMessage error={error} />
   </div>
@@ -58,9 +58,8 @@ const FormSelect = ({
     <Label required={required}>{label}</Label>
     <select
       {...register(name)}
-      className={`w-full p-2.5 rounded-lg border ${
-        error ? "border-red-500" : "border-gray-300"
-      } focus:ring-2 focus:ring-blue-200 outline-none bg-white`}
+      className={`w-full p-2.5 rounded-lg border ${error ? "border-red-500" : "border-gray-300"
+        } focus:ring-2 focus:ring-blue-200 outline-none bg-white`}
     >
       <option value="">{placeholder || "กรุณาเลือก"}</option>
       {options.map((opt) => (
@@ -100,11 +99,10 @@ const FormFileUpload = ({ label, name, register, error, watch, required }) => {
       <Label required={required}>{label}</Label>
       <label
         className={`border-2 border-dashed rounded-lg h-40 flex flex-col justify-center items-center cursor-pointer transition relative
-        ${
-          error
+        ${error
             ? "border-red-500 bg-red-50"
             : "border-gray-300 bg-gray-50 hover:bg-gray-100"
-        }`}
+          }`}
       >
         <div className="text-gray-400 mb-2">
           <Upload size={40} className="mx-auto" />
@@ -181,14 +179,17 @@ const RegisterForm = () => {
     };
   }, [clearError, storeError]);
 
+  const resume = useCandidateStore(state => state.applicationReseme)
+
   const onSubmit = async (data) => {
     // setIsSubmitting(true);  // ไม่ต้องใช้แล้วเพราะเราใช้ isLoading จาก store
     try {
-  
-      // console.log("Submitting:", data);
-      // await new Promise((resolve) => setTimeout(resolve, 1500)); // Mock API
 
-      const payload = { ...data,
+      console.log("Submitting:", data);
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Mock API
+
+      const payload = {
+        ...data,
         resume: data.resume[0], // Get the first file object
       };
 
@@ -196,17 +197,21 @@ const RegisterForm = () => {
 
       // ✅ เรียก Action จาก Store
       const result = await registerCandidate(payload);
-      
+      const candidateId = result?.data?.candidate_id || result?.candidate?.candidate_id || result?.candidate_id;
+
+      const resFormResumeApplication = resume(candidateId, data.resume[0])
+
+      if (resFormResumeApplication) return
+
       toast.success("ส่งใบสมัครเรียบร้อยแล้ว!");
       reset();
 
       // ✅ ดึง ID ของผู้สมัครจาก Response
       console.log("Registration Result:", result);
-      
-      const candidateId = result?.data?.candidate_id || result?.candidate?.candidate_id || result?.candidate_id;
+
 
       if (candidateId) {
-      // ✅  ส่งไปหน้า Welcome พร้อม ID
+        // ✅  ส่งไปหน้า Welcome พร้อม ID
         navigate(`/welcome-test/${candidateId}`); // Redirect after success
       }
     } catch (error) {
@@ -217,6 +222,8 @@ const RegisterForm = () => {
     //   setIsSubmitting(false);
     // }
   };
+
+
 
   return (
     // 1. Parent: ยึดเต็มหน้าจอ และล็อคไม่ให้ Body เลื่อน (สีพื้นหลังอยู่ที่นี่)
