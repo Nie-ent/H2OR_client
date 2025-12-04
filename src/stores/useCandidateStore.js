@@ -34,6 +34,36 @@ export const useCandidateStore = create((set, get) => ({
       throw error; // โยน error ออกไปเพื่อให้ UI (RegisterForm) รู้และ Toast แจ้งเตือนได้
     }
   },
+  applicationReseme: async (params, pdfFile) => {
+    console.log("params", params);
+    set({ isLoading: true, error: null });
+
+    try {
+      const formData = new FormData();
+      formData.append("pdf", pdfFile); // ต้องชื่อ pdf เท่านั้น
+
+      const response = await api.post(`/${params}/documents`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("response", response);
+
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message || "การอัปโหลดเอกสารล้มเหลว";
+
+      set({
+        isLoading: false,
+        error: errorMessage,
+      });
+
+      throw error;
+    }
+  },
 
   // 2. ฟังก์ชันดึงข้อมูลทั้งหมด (GET) - สำหรับ Dashboard
   fetchCandidates: async () => {
