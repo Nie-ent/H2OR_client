@@ -6,7 +6,6 @@ import AddCandidateModal from "../../components/admin/AddCandidateModal";
 import InterviewModal from "../../components/admin/InterviewModal";
 import EvaluationModal from "../../components/admin/EvaluationModal";
 import ActionFooter from "../../components/admin/ActionFooter";
-import { getPositionName } from "../../utils/formatters";
 import FilterBar from "../../components/admin/FilterBar";
 import { useAdminCandidateStore } from "../../stores/useAdminCandidateStore";
 
@@ -23,7 +22,7 @@ const JobApplicantInformation = ({ candidates = initialCandidates }) => {
   const [allCandidates, setAllCandidates] = useState(candidates);
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [filters, setFilters] = useState({ term: "", position: "", status: "" });
-  
+
   const [modals, setModals] = useState({ add: false, interview: false, eval: false });
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
@@ -82,9 +81,9 @@ const JobApplicantInformation = ({ candidates = initialCandidates }) => {
   };
 
   const handleSaveEvaluation = (data) => {
-    const updated = allCandidates.map(c => c.id === selectedCandidate.id ? { 
-        ...c, status: data.result, examScore: data.score, 
-        notes: data.notes ? `${c.notes || ''} [Feedback: ${data.notes}]` : c.notes 
+    const updated = allCandidates.map(c => c.id === selectedCandidate.id ? {
+      ...c, status: data.result, examScore: data.score,
+      notes: data.notes ? `${c.notes || ''} [Feedback: ${data.notes}]` : c.notes
     } : c);
     handleUpdateCandidate(updated);
   };
@@ -92,9 +91,9 @@ const JobApplicantInformation = ({ candidates = initialCandidates }) => {
   const handleSendResult = () => {
     const selectedList = allCandidates.filter(c => selectedItems.has(c.id));
     const readyToSend = selectedList.filter(c => c.status === 'passed' || c.status === 'rejected');
-    
+
     if (readyToSend.length === 0) return alert("⚠️ กรุณาเลือกรายการ");
-    
+
     const names = readyToSend.map(c => `- ${c.firstName} (${statusLabels[c.status]})`).join('\n');
     alert(`✉️ ระบบกำลังส่งอีเมลแจ้งผลการพิจารณา...\n\nรายชื่อผู้รับ (${readyToSend.length} คน):\n${names}\n\nสถานะ: ส่งเรียบร้อย ✅`);
     setSelectedItems(new Set());
@@ -110,7 +109,7 @@ const JobApplicantInformation = ({ candidates = initialCandidates }) => {
       </div>
 
       {/* Filter Component */}
-      <FilterBar 
+      <FilterBar
         searchTerm={filters.term} setSearchTerm={(v) => setFilters({ ...filters, term: v })}
         filterPosition={filters.position} setFilterPosition={(v) => setFilters({ ...filters, position: v })}
         filterStatus={filters.status} setFilterStatus={(v) => setFilters({ ...filters, status: v })}

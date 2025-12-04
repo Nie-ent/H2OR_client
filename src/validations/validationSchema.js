@@ -56,7 +56,7 @@ export const registerSchema = z.object({
     ),
   age: z.coerce.number({ invalid_type_error: ERRORS.NUMBER_ONLY })
     .min(18, "อายุ 18 ปีบริบูรณ์ขึ้นไปเท่านั้น"
-  ),
+    ),
   gender: z.enum(["male", "female", "other"], {
     errorMap: () => ({ message: "กรุณาระบุเพศ" }),
   }),
@@ -77,8 +77,9 @@ export const registerSchema = z.object({
 
   // แปลงค่า input ที่ได้มาให้เป็น number ก่อน validate
   expectedSalary: z.coerce.number({ invalid_type_error: ERRORS.NUMBER_ONLY })
-      .min(10000, "กรุณาระบุเงินเดือนที่คาดหวัง"
-  ),
+    .min(10000, "กรุณาระบุเงินเดือนที่คาดหวัง"
+    ),
+  stack: z.string().optional(),
 
   // --- ไฟล์แนบ (Resume) ---
   resume: z
@@ -102,25 +103,25 @@ export const adminRegisterSchema = z
       .regex(USERNAME_REGEX, ERRORS.USERNAME_INVALID),
 
     password: z
-    .string()
-    .min(6, ERRORS.PASSWORD_MIN)
-    .regex(PASSWORD_REGEX, ERRORS.PASSWORD_COMPLEXITY), 
+      .string()
+      .min(6, ERRORS.PASSWORD_MIN)
+      .regex(PASSWORD_REGEX, ERRORS.PASSWORD_COMPLEXITY),
 
     confirmPassword: z.string(),
 
     firstName: z.string().min(4, "กรุณากรอกชื่อจริง"),
     lastName: z.string().min(4, "กรุณากรอกนามสกุล"),
-  
-    email: z.string().email(ERRORS.EMAIL_INVALID),
-  
-    phone: z.string().regex(PHONE_REGEX, ERRORS.PHONE_INVALID), // เรียกใช้ตัวแปร Regex
-  
-    role: z.enum(["admin", "super_admin"], {
-    errorMap: () => ({ message: ERRORS.ROLE_REQUIRED }),
-  }),
 
-})
-.refine((data) => data.password === data.confirmPassword, {
+    email: z.string().email(ERRORS.EMAIL_INVALID),
+
+    phone: z.string().regex(PHONE_REGEX, ERRORS.PHONE_INVALID), // เรียกใช้ตัวแปร Regex
+
+    role: z.enum(["admin", "super_admin"], {
+      errorMap: () => ({ message: ERRORS.ROLE_REQUIRED }),
+    }),
+
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     message: ERRORS.PASSWORD_MISMATCH,
     path: ["confirmPassword"],
   });
@@ -155,7 +156,7 @@ export const superAdminLoginSchema = z.object({
     .string()
     .min(6, "กรุณากรอกรหัสผ่าน Super Admin")
     .regex(PASSWORD_REGEX, ERRORS.PASSWORD_COMPLEXITY),
-    
+
   // อนาคตอาจเพิ่ม Security Key หรือ 2FA สำหรับ Super Admin ตรงนี้ได้
   // securityKey: z.string().min(1, "กรุณากรอก Security Key"),
 });
