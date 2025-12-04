@@ -4,7 +4,7 @@ import axios from "axios";
 
 // สร้าง instance
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:8000/api/candidates", // เปลี่ยนเป็น URL ของ backend จริง
+  baseURL: "http://localhost:8000/api/", // เปลี่ยนเป็น URL ของ backend จริง
   headers: {
     "Content-Type": "application/json",
   },
@@ -22,17 +22,18 @@ const axiosInstance = axios.create({
     (error) => Promise.reject(error)
     );  
 
-    // Response Interceptor → จัดการ error กลาง
+    // Response Interceptors
     axiosInstance.interceptors.response.use(
-    (response) => response,
-    (error) => {
-        // ถ้า token หมดอายุ → logout หรือ redirect
-        if (error.response?.status === 401) {
-        localStorage.removeItem("token");
-        window.location.href = "/register"; 
-        }
-        return Promise.reject(error);
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("token");
+      // เปลี่ยนเป็นหน้า login ของระบบ admin (ถ้ามี)
+      window.location.href = "/login";
     }
-    );
+    return Promise.reject(error);
+  }
+);
+
 
 export default axiosInstance;
