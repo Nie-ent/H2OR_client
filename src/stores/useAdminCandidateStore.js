@@ -12,7 +12,7 @@ export const useAdminCandidateStore = create((set) => ({
   fetchCandidates: async () => {
     set({ isLoading: true, error: null });
     try {
-      const res = await api.get("/"); // GET /api/candidates
+      const res = await api.get("/candidates"); // GET /api/candidates
       const candidates = res.data?.candidates || [];
       set({ candidates, isLoading: false });
     } catch (error) {
@@ -58,6 +58,22 @@ export const useAdminCandidateStore = create((set) => ({
       throw error;
     }
   },
+
+    // --- UPDATE Candidate Info ---
+  updateCandidate: async (id, data) => {
+    try {
+      const res = await api.put(`/candidates/${id}`, data);
+      set((state) => ({
+        candidates: state.candidates.map((c) =>
+          c.candidate_id === id ? res.data : c
+        ),
+      }));
+      return res.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
 
   clearError: () => set({ error: null }),
 }));

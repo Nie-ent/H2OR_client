@@ -1,6 +1,8 @@
-// data.js
+//src/data/candidate.js
+
 
 export const initialCandidates = [
+
   {
     id: 1,
     firstName: 'สุดา',
