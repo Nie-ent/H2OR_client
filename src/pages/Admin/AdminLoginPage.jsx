@@ -78,7 +78,7 @@ const AdminLoginPage = () => {
 
       // เช็ค Role เพื่อ redirect (Optional)
       if (role === "super_admin") {
-        navigate("/admin/users");
+        navigate("/admin");
       } else {
         navigate("/admin");
       }

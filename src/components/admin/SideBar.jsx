@@ -2,19 +2,25 @@
 import { useState, useMemo } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { Users, Home, LayoutDashboard, UserPlus, Menu, X } from "lucide-react";
-
+import { useCandidateStore } from "../../stores/useCandidateStore";
 
 const Sidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // ดึงจำนวนผู้สมัครจริงจาก store
+  const candidatesCount = useCandidateStore(
+    (state) => state.candidates?.length ?? 0
+  );
+
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
   // 2. Config: แยก Data ออกจาก UI เพื่อให้ดูแลง่าย
-const role = localStorage.getItem("role")
+  const role = localStorage.getItem("role");
   // กันโค้ด error : ถ้าไม่มี user ให้เป็น string ว่าง หรือ guest
   const currentRole = role || "";
 
-  const adminMenus = useMemo(() => [
+  const adminMenus = useMemo(
+    () => [
       {
         label: "หน้าหลัก",
         path: "/admin",
@@ -32,14 +38,15 @@ const role = localStorage.getItem("role")
         label: "ผู้สมัครงาน",
         path: "/admin/users",
         icon: Users,
+        badge: candidatesCount, // ⭐ เพิ่ม badge
         allowedRoles: ["super_admin", "admin"], // เห็นได้ทั้งคู่
       },
     ],
-    []
+    [candidatesCount] // ⭐ จะ refresh เฉพาะอันนี้เมื่อจำนวนเปลี่ยน
   );
 
   // 4. Logic Filter: กรองเมนูตาม Role
-  const filteredMenus = adminMenus.filter(item =>
+  const filteredMenus = adminMenus.filter((item) =>
     item.allowedRoles?.includes(currentRole)
   );
 
@@ -64,14 +71,14 @@ const role = localStorage.getItem("role")
 
       {/* --- Mobile Overlay --- */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
-          onClick={closeMenu} 
+          onClick={closeMenu}
         />
       )}
 
       {/* --- Sidebar Container --- */}
-      <aside 
+      <aside
         className={`
           bg-navy text-white w-64 h-screen font-sans flex flex-col
           fixed top-0 left-0 z-50 
@@ -83,7 +90,10 @@ const role = localStorage.getItem("role")
         {/* Header */}
         <div className="p-6 font-bold text-xl border-b border-gray-700 flex items-center justify-between tracking-wide">
           <span className="flex items-center gap-2">H2OR Admin</span>
-          <button onClick={closeMenu} className="md:hidden text-gray-400 hover:text-white">
+          <button
+            onClick={closeMenu}
+            className="md:hidden text-gray-400 hover:text-white"
+          >
             <X size={20} />
           </button>
         </div>
@@ -101,8 +111,24 @@ const role = localStorage.getItem("role")
                 `${baseLinkClass} ${isActive ? activeClass : inactiveClass}`
               }
             >
-              <item.icon size={20} />
-              <span className="font-medium">{item.label}</span>
+              {/* LEFT: ICON + LABEL */}
+              <div className="flex items-center gap-3">
+                <item.icon size={20} />
+                <span className="font-medium">{item.label}</span>
+              </div>
+
+              {/* RIGHT: BADGE */}
+              {item.badge !== undefined && (
+                <span
+                  className="
+                    bg-blue-600 text-white text-xs 
+                    px-2 py-0.5 rounded-full 
+                    min-w-[28px] text-center
+                  "
+                >
+                  {item.badge}
+                </span>
+              )}
             </NavLink>
           ))}
 
