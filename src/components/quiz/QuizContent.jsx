@@ -14,6 +14,16 @@ const QuizContent = ({
   const isLastQuestion = currentQuestionIndex === totalQuestions - 1;
   console.log("currentQ", currentQ);
 
+  // เมื่อเป็นข้อสุดท้าย → ลบ candidate_id ก่อนส่งคำตอบ
+  const handleSubmitOrNext = () => {
+    if (isLastQuestion && !isSubmitting) {
+      localStorage.removeItem("candidate_id");
+      console.log("candidate_id removed after quiz completed");
+    }
+
+    onNextOrSubmit();
+  };
+
   return (
     <div className="flex-1 bg-white rounded-2xl shadow-2xl p-6 md:p-10 text-[#0f2342] order-1 md:order-2">
       {/* Header */}
@@ -55,10 +65,9 @@ const QuizContent = ({
           disabled={currentQuestionIndex === 0 || isSubmitting}
           className={`
             flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all
-            ${
-              currentQuestionIndex === 0
-                ? "bg-gray-700 text-white opacity-50 cursor-not-allowed" // กดไม่ได้
-                : "bg-[#354665] hover:bg-[#405275] text-white cursor-pointer hover:shadow-lg" // กดได้
+            ${currentQuestionIndex === 0
+              ? "bg-gray-700 text-white opacity-50 cursor-not-allowed"
+              : "bg-[#354665] hover:bg-[#405275] text-white cursor-pointer hover:shadow-lg"
             }`}
         >
           <span>←</span> ย้อนกลับ
@@ -66,14 +75,13 @@ const QuizContent = ({
 
         {/* ปุ่มถัดไป / ส่งคำตอบ */}
         <button
-          onClick={onNextOrSubmit}
+          onClick={handleSubmitOrNext}
           disabled={!selectedAnswer || isSubmitting}
           className={`
             flex-1 py-3 rounded-lg font-semibold flex items-center justify-center gap-2 transition-all relative
-            ${
-              !selectedAnswer || isSubmitting
-                ? "bg-gray-700 text-white opacity-50 cursor-not-allowed" // กดไม่ได้
-                : "bg-[#F2C94C] hover:border-[#F2C94C] text-[#354665] cursor-pointer hover:shadow-lg" // กดได้
+            ${!selectedAnswer || isSubmitting
+              ? "bg-gray-700 text-white opacity-50 cursor-not-allowed"
+              : "bg-[#F2C94C] hover:border-[#F2C94C] text-[#354665] cursor-pointer hover:shadow-lg"
             }`}
         >
           {isSubmitting ? (

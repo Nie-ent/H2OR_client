@@ -194,6 +194,7 @@ const RegisterForm = () => {
       const result = await registerCandidate(payload);
       const candidateId = result?.data?.candidate_id || result?.candidate?.candidate_id || result?.candidate_id;
 
+
       const resFormResumeApplication = resume(candidateId, data.resume[0])
       console.log('resFormResumeApplication', resFormResumeApplication)
 
@@ -203,8 +204,8 @@ const RegisterForm = () => {
       reset();
 
       if (candidateId) {
-        // ✅  ส่งไปหน้า Welcome พร้อม ID
-        navigate('/quiz'); // Redirect after success
+        localStorage.setItem("candidate_id", candidateId)
+        navigate('/quiz');
       }
     } catch (error) {
       toast.error("เกิดข้อผิดพลาดในการส่งข้อมูล");
