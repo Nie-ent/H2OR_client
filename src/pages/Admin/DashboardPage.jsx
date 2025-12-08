@@ -46,7 +46,7 @@ const countApplicantsByDate = (applicants) => {
 // =============================================================================================
 // III. SUB-COMPONENTS (UI ELEMENTS)
 // =============================================================================================
-const StatCard = ({ title, value, colorClass, bgColorClass }) => (
+const StatCard = ({ title, value, icon: Icon, colorClass, bgColorClass }) => (
   <div className="bg-white p-6 rounded-xl shadow-md border-t-4" style={{ borderColor: colorClass.split("-")[1] }}>
     <div className="flex items-center justify-between">
       <div className="space-y-1">
