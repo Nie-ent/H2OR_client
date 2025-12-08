@@ -69,17 +69,17 @@ const JobApplicantInformation = () => {
   useEffect(() => {
     if (Array.isArray(storeCandidatesAdmin) && storeCandidatesAdmin.length > 0) {
       setAllCandidates(storeCandidatesAdmin);
-      console.log("Using admin store candidates:", storeCandidatesAdmin.length);
+      // console.log("Using admin store candidates:", storeCandidatesAdmin.length);
       return;
     }
     if (Array.isArray(storeCandidatesPublic) && storeCandidatesPublic.length > 0) {
       setAllCandidates(storeCandidatesPublic);
-      console.log("Using public store candidates:", storeCandidatesPublic.length);
+      // console.log("Using public store candidates:", storeCandidatesPublic.length);
       return;
     }
     // empty: set empty array
     setAllCandidates([]);
-    console.log("No candidates found in stores");
+    // console.log("No candidates found in stores");
   }, [storeCandidatesAdmin, storeCandidatesPublic]);
 
   // --- 2. Filter Logic ---
@@ -93,6 +93,8 @@ const JobApplicantInformation = () => {
       return matchesSearch && matchesPos && matchesStatus;
     });
   }, [allCandidates, filters]);
+
+  // console.log('filteredCandidates: ', filteredCandidates[0].email)
 
   // --- 3. Handlers ---
   const toggleSelection = (id) => {
@@ -199,8 +201,8 @@ const JobApplicantInformation = () => {
           </div>
         ) : (
           filteredCandidates.map((candidate) => (
-            <CandidateCard
-              key={candidate.id}
+            < CandidateCard
+              key={candidate.candidate_id}
               candidate={candidate}
               isSelected={selectedItems.has(candidate.id)}
               onToggle={toggleSelection}

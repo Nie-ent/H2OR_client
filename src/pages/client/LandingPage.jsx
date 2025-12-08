@@ -15,7 +15,7 @@ function LandingPage() {
       <Navbar />
 
       {/* 2. Main Content: ใช้ flex-grow เพื่อดัน Footer ลงล่างสุดถ้าเนื้อหาน้อย */}
-      <main className="flex-grow w-full">
+      <main className="grow w-full">
         <Hero />
         <NewsSection />
         <Services />

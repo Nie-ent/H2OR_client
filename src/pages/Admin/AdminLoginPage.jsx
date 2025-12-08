@@ -21,6 +21,7 @@ import {
   loginSchema,
   forgotPasswordSchema,
 } from "../../validations/validationSchema";
+import { useEffect } from "react";
 
 const AdminLoginPage = () => {
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ const AdminLoginPage = () => {
       const user = responseData.user;
       const token = responseData.token;
       const role = responseData.user.role
-      
+
       // บันทึกลง Store
       localStorage.setItem("token", token)
       localStorage.setItem("role", role)
@@ -71,17 +72,14 @@ const AdminLoginPage = () => {
         throw new Error("ไม่พบข้อมูลผู้ใช้งาน หรือ Token");
       }
 
-       // 🔍 Debug: ดูโครงสร้างข้อมูลจริงใน Console (สำคัญมาก!)
+      // 🔍 Debug: ดูโครงสร้างข้อมูลจริงใน Console (สำคัญมาก!)
       console.log("Logged in as:", role)
 
       toast.success("เข้าสู่ระบบสำเร็จ!");
 
       // เช็ค Role เพื่อ redirect (Optional)
-      if (role === "super_admin") {
-        navigate("/admin");
-      } else {
-        navigate("/admin");
-      }
+      window.location.reload()
+
     } catch (error) {
       const msg =
         error.response?.data?.message || "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง";
@@ -90,17 +88,8 @@ const AdminLoginPage = () => {
   };
 
   // ✅ 4. Forgot Password Handler
-  const onForgotSubmit = async (data) => {
-    try {
-      await axiosInstance.post("/admin/forgot-password", data);
-      toast.success("ส่งลิงก์รีเซ็ตไปยังอีเมลแล้ว");
-      setView("login");
-      resetForgot();
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "ไม่สามารถส่งลิงก์รีเซ็ตได้"
-      );
-    }
+  const onForgotSubmit = () => {
+    navigate('/forgot')
   };
 
   return (
@@ -108,7 +97,7 @@ const AdminLoginPage = () => {
       <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="bg-gray-50 p-6 text-center border-b border-gray-100">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-[#0b2545] mb-4 shadow-inner">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-navy mb-4 shadow-inner">
             {view === "login" ? <ShieldCheck size={32} /> : <Lock size={32} />}
           </div>
           <h1 className="text-2xl font-bold text-gray-800">
@@ -130,20 +119,18 @@ const AdminLoginPage = () => {
                 </label>
                 <div className="relative">
                   <User
-                    className={`absolute left-3 top-3 ${
-                      errorsLogin.username ? "text-red-500" : "text-gray-400"
-                    }`}
+                    className={`absolute left-3 top-3 ${errorsLogin.username ? "text-red-500" : "text-gray-400"
+                      }`}
                     size={20}
                   />
                   <input
                     type="text"
                     {...registerLogin("username")}
                     placeholder="Enter username"
-                    className={`w-full pl-10 p-3 rounded-lg border ${
-                      errorsLogin.username
-                        ? "border-red-500 focus:ring-red-200 bg-red-50"
-                        : "border-gray-300 focus:ring-blue-200"
-                    } outline-none transition`}
+                    className={`w-full pl-10 p-3 rounded-lg border ${errorsLogin.username
+                      ? "border-red-500 focus:ring-red-200 bg-red-50"
+                      : "border-gray-300 focus:ring-blue-200"
+                      } outline-none transition`}
                   />
                 </div>
                 {errorsLogin.username && (
@@ -170,20 +157,18 @@ const AdminLoginPage = () => {
                 </div>
                 <div className="relative">
                   <Lock
-                    className={`absolute left-3 top-3 ${
-                      errorsLogin.password ? "text-red-500" : "text-gray-400"
-                    }`}
+                    className={`absolute left-3 top-3 ${errorsLogin.password ? "text-red-500" : "text-gray-400"
+                      }`}
                     size={20}
                   />
                   <input
                     type="password"
                     {...registerLogin("password")}
                     placeholder="Enter password"
-                    className={`w-full pl-10 p-3 rounded-lg border ${
-                      errorsLogin.password
-                        ? "border-red-500 focus:ring-red-200 bg-red-50"
-                        : "border-gray-300 focus:ring-blue-200"
-                    } outline-none transition`}
+                    className={`w-full pl-10 p-3 rounded-lg border ${errorsLogin.password
+                      ? "border-red-500 focus:ring-red-200 bg-red-50"
+                      : "border-gray-300 focus:ring-blue-200"
+                      } outline-none transition`}
                   />
                 </div>
                 {errorsLogin.password && (
@@ -234,20 +219,18 @@ const AdminLoginPage = () => {
                 </label>
                 <div className="relative">
                   <Mail
-                    className={`absolute left-3 top-3 ${
-                      errorsForgot.email ? "text-red-500" : "text-gray-400"
-                    }`}
+                    className={`absolute left-3 top-3 ${errorsForgot.email ? "text-red-500" : "text-gray-400"
+                      }`}
                     size={20}
                   />
                   <input
                     type="email"
                     {...registerForgot("email")}
                     placeholder="admin@example.com"
-                    className={`w-full pl-10 p-3 rounded-lg border ${
-                      errorsForgot.email
-                        ? "border-red-500 focus:ring-red-200 bg-red-50"
-                        : "border-gray-300 focus:ring-blue-200"
-                    } outline-none transition`}
+                    className={`w-full pl-10 p-3 rounded-lg border ${errorsForgot.email
+                      ? "border-red-500 focus:ring-red-200 bg-red-50"
+                      : "border-gray-300 focus:ring-blue-200"
+                      } outline-none transition`}
                   />
                 </div>
                 {errorsForgot.email && (

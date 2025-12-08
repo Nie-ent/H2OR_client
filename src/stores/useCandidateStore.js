@@ -15,7 +15,7 @@ export const useCandidateStore = create((set, get) => ({
     try {
       // ⚡ ยิง Axios ตรงนี้เลย (ไม่ต้องเรียก Service)
       // url คือ "/" เพราะ baseURL ใน axiosCandidate เป็น .../api/candidates แล้ว
-      const response = await api.post("/", candidateData);
+      const response = await api.post("/candidates", candidateData);
       console.log("response", response);
 
       set({ isLoading: false });
@@ -40,7 +40,7 @@ export const useCandidateStore = create((set, get) => ({
       const formData = new FormData();
       formData.append("pdf", pdfFile); // ต้องชื่อ pdf เท่านั้น
 
-      const response = await api.post(`/${params}/documents`, formData, {
+      const response = await api.post(`/candidates/${params}/documents`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -69,7 +69,8 @@ export const useCandidateStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       console.log('[fetchCandidates] params:', params);
-      const response = await api.get("/candidates", {params});
+      const response = await api.get("/candidates", { params });
+
 
       // backend อาจคืน [..] หรือ { data: [...], meta: {...} }
       const rawList = response.data?.data ?? response.data ?? [];

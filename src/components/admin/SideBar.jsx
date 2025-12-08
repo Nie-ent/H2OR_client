@@ -1,21 +1,32 @@
 // src/components/admin/SideBar.jsx
 import { useState, useMemo } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, Navigate } from "react-router-dom";
 import { Users, Home, LayoutDashboard, UserPlus, Menu, X } from "lucide-react";
 import { useCandidateStore } from "../../stores/useCandidateStore";
+import { useEffect } from "react";
 
 const Sidebar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const fetchCandidateNumber = useCandidateStore(state => state.fetchCandidates)
+
+  useEffect(() => {
+    fetchCandidateNumber()
+  }, [])
+
   // ดึงจำนวนผู้สมัครจริงจาก store
-  const candidatesCount = useCandidateStore(
-    (state) => state.candidates?.length ?? 0
-  );
+  const candidatesCount = useCandidateStore((state) => state.candidates?.length);
 
   const toggleMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
   const closeMenu = () => setIsMobileMenuOpen(false);
   // 2. Config: แยก Data ออกจาก UI เพื่อให้ดูแลง่าย
   const role = localStorage.getItem("role");
+
+  const hdlLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    Navigate("/"); // เปลี่ยนหน้าแบบ React
+  };
   // กันโค้ด error : ถ้าไม่มี user ให้เป็น string ว่าง หรือ guest
   const currentRole = role || "";
 
@@ -23,14 +34,14 @@ const Sidebar = () => {
     () => [
       {
         label: "หน้าหลัก",
-        path: "/admin",
+        path: "/",
         icon: LayoutDashboard,
         end: true, // ใช้ prop นี้เพื่อให้ Active เฉพาะ path นี้เป๊ะๆ ไม่รวม sub-path
         allowedRoles: ["super_admin", "admin"], //  เห็นได้ทั้งคู่
       },
       {
         label: "สร้างผู้ดูแลระบบ",
-        path: "/admin/create-admin",
+        path: "/admin/register",
         icon: UserPlus,
         allowedRoles: ["super_admin"], // ✅ เฉพาะ Super Admin เท่านั้น
       },
@@ -84,7 +95,7 @@ const Sidebar = () => {
           fixed top-0 left-0 z-50 
           transition-transform duration-300 ease-in-out
           ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0 md:static md:sticky 
+          md:translate-x-0  md:sticky 
         `}
       >
         {/* Header */}
@@ -123,7 +134,7 @@ const Sidebar = () => {
                   className="
                     bg-blue-600 text-white text-xs 
                     px-2 py-0.5 rounded-full 
-                    min-w-[28px] text-center
+                    min-w-7 text-center
                   "
                 >
                   {item.badge}
@@ -138,7 +149,7 @@ const Sidebar = () => {
           {/* 2. เมนู "กลับหน้าหลัก" (นำมารวมใน Nav เลย) */}
           <Link
             to="/"
-            onClick={closeMenu}
+            onClick={hdlLogout}
             className={`${baseLinkClass} text-gray-400 hover:text-red-400 hover:bg-red-500/10`}
           >
             <Home size={20} />

@@ -1,6 +1,6 @@
 // src/stores/useAdminCandidateStore.js
 import { create } from "zustand";
-import api from "../configs/axiosCandidate"; 
+import api from "../configs/axiosCandidate";
 // baseURL = "http://localhost:8000/api/candidates"
 
 export const useAdminCandidateStore = create((set) => ({
@@ -13,7 +13,9 @@ export const useAdminCandidateStore = create((set) => ({
     set({ isLoading: true, error: null });
     try {
       const res = await api.get("/candidates"); // GET /api/candidates
-      const candidates = res.data?.candidates || [];
+      console.log('res: ', res.data.data[1])
+      const candidates = res.data.data;
+      console.log('candidates', candidates)
       set({ candidates, isLoading: false });
     } catch (error) {
       console.error("fetchCandidates error:", error);
@@ -59,7 +61,7 @@ export const useAdminCandidateStore = create((set) => ({
     }
   },
 
-    // --- UPDATE Candidate Info ---
+  // --- UPDATE Candidate Info ---
   updateCandidate: async (id, data) => {
     try {
       const res = await api.put(`/candidates/${id}`, data);
