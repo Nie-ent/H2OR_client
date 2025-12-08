@@ -1,64 +1,78 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-// สร้าง Store ชื่อ useAuthStore
 export const useAuthStore = create(
   persist(
     (set, get) => ({
-      user: null, // เก็บข้อมูล User (ชื่อ, role)
+      user: null,
       role: null,
-      token: null, // เก็บ Token
+      token: null,
       isAuthenticated: false,
 
-      // ฟังก์ชัน Login: รับค่ามาแล้วบันทึกลง Store + LocalStorage (ทำให้อัตโนมัติโดย persist)
-      login: (userData, token) => {
-        console.log("Login Payload", userData);
+      // login: รับ (payload, token)
+      login: (payload, token) => {
+        console.log("Login Payload:", payload);
 
-       // 🛠️ ปรับ Logic การดึงข้อมูลให้ครอบคลุมทุกความเป็นไปได้
+        // รองรับหลายรูปแบบของ API response
         let userProfile = null;
 
-        if (response?.data?.data?.user) {
-          // Case 1: ซ้อนลึก 3 ชั้น (Standard API response format)
-          userProfile = response.data.data.user;
-        } else if (response?.data?.user) {
-          // Case 2: ซ้อน 2 ชั้น
-          userProfile = response.data.user;
-        } else if (response?.user) {
-          // Case 3: ชั้นเดียว
-          userProfile = response.user;
-        } else {
-          // Case 4: ตัว response เองคือ user object
-          userProfile = response;
-        } 
-
-        console.log("Extracted user Profile:", userProfile)
-        
-        // ตรวจสอบว่า userProfile มีค่า firstName หรือไม่
-        if (!userProfile?.firstName) {
-            console.warn("⚠️ Warning: userProfile does not have 'firstName'. Check API response.");
+        // case: payload is axios response (common pattern)
+        if (payload?.data?.data?.user) {
+          userProfile = payload.data.data.user;
+        } else if (payload?.data?.user) {
+          userProfile = payload.data.user;
+        } else if (payload?.user) {
+          userProfile = payload.user;
+        } else if (payload) {
+          userProfile = payload;
         }
 
+        // Normalize fields: ensure we have firstName/lastName/displayName if possible
+        // Some APIs may return `name` or `fullName` instead of firstName/lastName
+        const firstName =
+          userProfile?.firstName ||
+          (typeof userProfile?.name === "string" ? userProfile.name.split(" ")[0] : undefined) ||
+          (typeof userProfile?.fullName === "string" ? userProfile.fullName.split(" ")[0] : undefined);
+
+        const lastName =
+          userProfile?.lastName ||
+          (typeof userProfile?.name === "string" ? userProfile.name.split(" ").slice(1).join(" ") : undefined) ||
+          (typeof userProfile?.fullName === "string" ? userProfile.fullName.split(" ").slice(1).join(" ") : undefined);
+
+        const role = userProfile?.role || userProfile?.roles || null;
+
+        const normalizedUser = {
+          ...userProfile,
+          firstName: userProfile?.firstName || firstName,
+          lastName: userProfile?.lastName || lastName,
+          displayName: userProfile?.displayName || userProfile?.name || userProfile?.fullName || `${firstName || ""} ${lastName || ""}`.trim(),
+        };
+
+        if (!normalizedUser.firstName && !normalizedUser.displayName) {
+          console.warn("⚠️ Warning: user profile missing name fields", userProfile);
+        }
+
+        // set state
         set({
-          user: userProfile,
-          role: userProfile?.role,
-          token: token,
+          user: normalizedUser,
+          role: role,
+          token: token || null,
           isAuthenticated: true,
         });
-        // หมายเหตุ: persist middleware จะจัดการ save ลง localStorage ให้เอง
-        // แต่ถ้า axios คุณอ่านแบบ raw localStorage.getItem ก็ไม่มีปัญหาครับ ข้อมูลมันจะอยู่ที่เดียวกัน
-        localStorage.setItem("token", token); // บันทึก manual เผื่อไว้ให้ axios config อ่านง่ายๆ
-        localStorage.setItem("role", userProfile.role); // บันทึก manual เผื่อไว้ให้ axios config อ่านง่ายๆ
+
+        // only set localStorage keys when values exist (avoid storing 'undefined')
+        if (token) localStorage.setItem("token", token);
+        if (role) localStorage.setItem("role", role);
       },
 
-      // ฟังก์ชัน Logout: ล้างค่าทิ้ง
       logout: () => {
-        set({ user: null, token: null, isAuthenticated: false });
-        localStorage.removeItem("token"); // ลบออกจาก localStorage เพื่อให้ Axios interceptor หยุดส่ง
-        
+        set({ user: null, token: null, isAuthenticated: false, role: null });
+        localStorage.removeItem("token");
+        localStorage.removeItem("role");
       },
     }),
     {
-      name: "auth-storage", // ชื่อ Key ใน LocalStorage
+      name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
     }
   )
