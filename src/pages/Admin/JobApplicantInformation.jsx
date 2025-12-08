@@ -19,7 +19,7 @@ const JobApplicantInformation = () => {
     createCandidate,
   } = useAdminCandidateStore();
 
-    // Also grab the other store (if exists) for debugging:
+  // Also grab the other store (if exists) for debugging:
   const { candidates: storeCandidatesPublic, fetchCandidates: fetchCandidatesPublic } = useCandidateStore();
 
   // --- 1. State Management ---
@@ -42,7 +42,7 @@ const JobApplicantInformation = () => {
   // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
   useEffect(() => {
     // fetchCandidates();
-      try {
+    try {
       if (typeof fetchCandidatesAdmin === "function") {
         fetchCandidatesAdmin();
         console.log("Called fetchCandidatesAdmin()");
@@ -65,7 +65,7 @@ const JobApplicantInformation = () => {
   // }, [storeCandidates]);
   // console.log('storeCandidates', storeCandidates)
 
-   // 2) Sync whichever store has data (prefer admin store)
+  // 2) Sync whichever store has data (prefer admin store)
   useEffect(() => {
     if (Array.isArray(storeCandidatesAdmin) && storeCandidatesAdmin.length > 0) {
       setAllCandidates(storeCandidatesAdmin);
@@ -81,19 +81,19 @@ const JobApplicantInformation = () => {
     setAllCandidates([]);
     console.log("No candidates found in stores");
   }, [storeCandidatesAdmin, storeCandidatesPublic]);
-  
+
   // --- 2. Filter Logic ---
   const filteredCandidates = useMemo(() => {
     return allCandidates.filter((c) => {
       const matchesSearch =
-      (c.firstName?.toLowerCase() ?? "").includes(filters.term.toLowerCase()) ||
-      (c.email?.toLowerCase() ?? "").includes(filters.term.toLowerCase());
+        (c.firstName?.toLowerCase() ?? "").includes(filters.term.toLowerCase()) ||
+        (c.email?.toLowerCase() ?? "").includes(filters.term.toLowerCase());
       const matchesPos = !filters.position || c.position === filters.position;
-      const matchesStatus = !filters.status || filters.status === "all"  || c.status === filters.status;
+      const matchesStatus = !filters.status || filters.status === "all" || c.status === filters.status;
       return matchesSearch && matchesPos && matchesStatus;
     });
   }, [allCandidates, filters]);
-  
+
   // --- 3. Handlers ---
   const toggleSelection = (id) => {
     const newSelected = new Set(selectedItems);
@@ -106,6 +106,8 @@ const JobApplicantInformation = () => {
     setModals({ ...modals, add: false, interview: false, eval: false });
     setSelectedCandidate(null);
   };
+
+  const fetchCandidates = useAdminCandidateStore(staet => staet.fetchCandidates)
 
   // แก้ตรงนี้ให้ยิง API แทน fake เพิ่มใน state อย่างเดียว
   const handleSaveCandidate = async (formData) => {
@@ -132,13 +134,13 @@ const JobApplicantInformation = () => {
     const updated = allCandidates.map((c) =>
       c.id === selectedCandidate.id
         ? {
-            ...c,
-            status: data.result,
-            examScore: data.score,
-            notes: data.notes
-              ? `${c.notes || ""} [Feedback: ${data.notes}]`
-              : c.notes,
-          }
+          ...c,
+          status: data.result,
+          examScore: data.score,
+          notes: data.notes
+            ? `${c.notes || ""} [Feedback: ${data.notes}]`
+            : c.notes,
+        }
         : c
     );
     handleUpdateCandidate(updated);
