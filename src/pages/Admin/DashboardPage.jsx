@@ -46,7 +46,7 @@ const countApplicantsByDate = (applicants) => {
 // =============================================================================================
 // III. SUB-COMPONENTS (UI ELEMENTS)
 // =============================================================================================
-const StatCard = ({ title, value, icon: Icon, colorClass, bgColorClass }) => (
+const StatCard = ({ title, value, colorClass, bgColorClass }) => (
   <div className="bg-white p-6 rounded-xl shadow-md border-t-4" style={{ borderColor: colorClass.split("-")[1] }}>
     <div className="flex items-center justify-between">
       <div className="space-y-1">
@@ -169,7 +169,7 @@ const ApplicantModal = ({ date, applicants, onClose }) => {
               >
                 <div className="flex-1 min-w-0 pr-4">
                   <p className="font-semibold text-gray-900 truncate flex items-center">
-                    <User size={16} className="text-indigo-500 mr-2 flex-shrink-0" />
+                    <User size={16} className="text-indigo-500 mr-2 shrink-0" />
                     {cleanedName}
                     <span className="ml-4 px-2 py-0.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-md">({app.applicationTime} น.)</span>
                   </p>
@@ -273,9 +273,8 @@ const ApplicantCalendar = ({ applicants, currentDate, setCurrentDate }) => {
                 <button
                   key={index}
                   onClick={() => handleMonthSelect(index)}
-                  className={`py-2 text-sm rounded-lg transition-colors ${
-                    index === currentDate.getMonth() && currentYear === new Date().getFullYear() ? "bg-indigo-600 text-white font-bold" : "text-gray-700 hover:bg-indigo-50"
-                  }`}
+                  className={`py-2 text-sm rounded-lg transition-colors ${index === currentDate.getMonth() && currentYear === new Date().getFullYear() ? "bg-indigo-600 text-white font-bold" : "text-gray-700 hover:bg-indigo-50"
+                    }`}
                 >
                   {monthName}
                 </button>
@@ -367,7 +366,7 @@ const DashboardPage = () => {
   return (
     <div className="space-y-8 p-8 bg-gray-50 min-h-screen">
       <header className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h1 className="text-3xl font-extrabold text-[#0b2545] flex items-center gap-2">
+        <h1 className="text-3xl font-extrabold text-navy flex items-center gap-2">
           <LayoutDashboard size={28} /> Dashboard ภาพรวมการรับสมัคร
         </h1>
         <div className="bg-white p-2 px-4 rounded-full shadow-sm flex items-center gap-2 border border-gray-200">

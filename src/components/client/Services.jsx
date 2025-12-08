@@ -7,18 +7,18 @@ const Services = () => (
   <section id="services" className="w-full bg-[#f1f3f4] py-12 md:py-20 relative">
     {/* 2. ปรับ Padding แนวนอน: มือถือ px-4 เพื่อให้มีเนื้อที่มากขึ้น */}
     <div className="max-w-[1200px] mx-auto px-4 md:px-8">
-      
+
       {/* 3. ปรับ Margin ด้านล่าง: มือถือห่างน้อยลง (mb-10) */}
       <div className="text-center mb-10 md:mb-16">
-        <div className="inline-block bg-gradient-to-br from-[#f2b724] to-[#072c4d] py-2 px-6 rounded-[25px] text-sm font-bold mb-4 text-white shadow-[0_4px_15px_rgba(242,183,36,0.3)]">
+        <div className="inline-block bg-linear-to-br from-[#f2b724] to-[#072c4d] py-2 px-6 rounded-[25px] text-sm font-bold mb-4 text-white shadow-[0_4px_15px_rgba(242,183,36,0.3)]">
           Services
         </div>
-        
+
         {/* 4. Responsive Font Size: เริ่มที่ 3xl -> จอใหญ่ 5xl (หรือ 3rem ตามเดิม) */}
         <h3 className="text-[#072c4d] text-3xl md:text-4xl lg:text-[3rem] font-extrabold m-0 mb-4 tracking-tight leading-tight">
           บริการของเรา
         </h3>
-        
+
         {/* 5. Responsive Paragraph: เริ่มที่ text-base -> จอใหญ่ text-xl */}
         <p className="text-[#3b5474] text-base md:text-xl m-0 max-w-[600px] mx-auto leading-relaxed">
           โซลูชันครบวงจรสำหรับทุกความต้องการด้านเทคโนโลยี

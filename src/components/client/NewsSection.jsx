@@ -5,14 +5,14 @@ const NewsSection = () => {
   const navigate = useNavigate();
 
   const handleClickCandidade = () => {
-    navigate("/apply");
+    navigate("/applicant");
   };
   const handleClickAdmin = () => {
     navigate("/admin/login");
   };
 
   return (
-    <section className="w-full bg-gradient-to-br from-[#131e2d] to-[#3b5474] py-12 md:py-20 relative overflow-hidden">
+    <section className="w-full bg-linear-to-br from-[#131e2d] to-[#3b5474] py-12 md:py-20 relative overflow-hidden">
       {/* Background Shape - ปรับขนาดและตำแหน่งให้ไม่บังเนื้อหาในมือถือ */}
       <div className="absolute top-[-20%] right-[-20%] md:top-[-50%] md:right-[-10%] w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-[radial-gradient(circle,rgba(242,183,36,0.15)_0%,transparent_70%)] rounded-full pointer-events-none"></div>
 
@@ -21,7 +21,7 @@ const NewsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
           {/* ส่วนรูปภาพ */}
           <div className="relative group perspective-1000 order-1 md:order-1">
-            <div className="absolute -inset-2 bg-gradient-to-r from-[#f2b724] to-[#f2b724]/20 rounded-3xl blur-lg opacity-30 group-hover:opacity-60 transition duration-500"></div>
+            <div className="absolute -inset-2 bg-linear-to-r from-[#f2b724] to-[#f2b724]/20 rounded-3xl blur-lg opacity-30 group-hover:opacity-60 transition duration-500"></div>
             <img
               src={Notictwo}
               alt="News and Activities"

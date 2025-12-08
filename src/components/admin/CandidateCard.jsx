@@ -15,9 +15,8 @@ const CandidateCard = ({
 
   return (
     <div
-      className={`bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col md:flex-row justify-center items-start  transition-all ${
-        isSelected ? "border-2 border-[#f2b724]" : ""
-      }`}
+      className={`bg-white p-4 md:p-6 rounded-xl shadow-sm flex flex-col md:flex-row justify-center items-start  transition-all ${isSelected ? "border-2 border-[#f2b724]" : ""
+        }`}
     >
       {/* Checkbox */}
       <div className="flex w-full md:w-auto items-center mb-4 md:mb-0 md:mr-4 pt-1">
@@ -36,10 +35,10 @@ const CandidateCard = ({
       {/* Info Content */}
       <div className="flex-1 w-full flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto items-center sm:items-start">
-          
+
           {/* --- [1] ส่วนแสดงรูปภาพ + ปุ่มดูข้อมูล (จัดกึ่งกลาง) --- */}
-          <div className="flex-shrink-0 flex flex-col items-center gap-2">
-            
+          <div className="shrink-0 flex flex-col items-center gap-2">
+
             {/* รูปภาพ */}
             {candidate.photoUrl ? (
               <img
@@ -78,9 +77,8 @@ const CandidateCard = ({
                 {candidate.firstName} {candidate.lastName}
               </h3>
               <span
-                className={`px-3 py-0.5 rounded-lg text-white text-base font-medium ${
-                  statusColors[candidate.status] || "bg-gray-400"
-                }`}
+                className={`px-3 py-0.5 rounded-lg text-white text-base font-medium ${statusColors[candidate.status] || "bg-gray-400"
+                  }`}
               >
                 {statusLabels[candidate.status] || candidate.status}
               </span>
@@ -93,7 +91,7 @@ const CandidateCard = ({
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-[#637996]">
               <span className="truncate">📧 {candidate.email}</span>
               <span>📱 {candidate.phone}</span>
-              <span>💼 Exp: {candidate.experience} ปี</span>
+              <span>💼 Exp: - ปี</span>
             </div>
 
             {candidate.interviewDetails && (
@@ -113,8 +111,8 @@ const CandidateCard = ({
 
             <div className="mt-2 text-sm">
               <span className="text-[#637996]">💻 Skills: </span>
-              <span className="text-[#072c4d] break-words">
-                {candidate.skills}
+              <span className="text-[#072c4d] wrap-break-words">
+                {candidate.stack}
               </span>
             </div>
           </div>
@@ -122,16 +120,16 @@ const CandidateCard = ({
 
         {/* Right Actions */}
         <div className="flex flex-row md:flex-col w-full md:w-auto justify-between items-center md:items-end gap-2 mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-gray-100">
-          
+
           {/* Score Display */}
-          {candidate.examScore && (
+          {candidate.score && (
             <div className="flex flex-col items-start md:items-end mb-0 md:mb-2">
               <span className="text-[10px] text-[#637996] font-medium mb-1 uppercase tracking-wide">
                 Exam Score
               </span>
               <div className="flex items-baseline bg-[#f2b724] text-white px-3 py-2 rounded-lg shadow-md">
                 <span className="text-2xl md:text-3xl font-bold leading-none">
-                  {candidate.examScore}
+                  {candidate.score}
                 </span>
                 <span className="text-xs ml-1 opacity-80 font-medium">
                   /100
@@ -142,7 +140,7 @@ const CandidateCard = ({
 
           {/* Button Group */}
           <div className="flex gap-2 justify-end">
-            {candidate.status === "pending" && (
+            {candidate.candidate_statuses === "pending" && (
               <Button
                 variant="secondary"
                 className="text-sm py-2 bg-[#3b5474] hover:bg-[#2c3e56]"
@@ -151,11 +149,11 @@ const CandidateCard = ({
                 📅 นัดสัมภาษณ์
               </Button>
             )}
-            
+
             {candidate.status === "interview" && (
               <Button
                 variant="secondary"
-                className="text-sm py-2 bg-[#5d738a] hover:bg-[#4a5d70] text-white" 
+                className="text-sm py-2 bg-[#5d738a] hover:bg-[#4a5d70] text-white"
                 onClick={() => onEvaluate(candidate)}
               >
                 📝 ประเมินผล
