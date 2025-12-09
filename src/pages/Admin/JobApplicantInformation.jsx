@@ -40,22 +40,22 @@ const JobApplicantInformation = () => {
 
   const fetchCandidate = useCandidateStore((s) => s.fetchCandidates);
   // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
-  useEffect(() => {
+  // useEffect(() => {
     // fetchCandidates();
-    try {
-      if (typeof fetchCandidatesAdmin === "function") {
-        fetchCandidatesAdmin();
-        console.log("Called fetchCandidatesAdmin()");
-      } else if (typeof fetchCandidatesPublic === "function") {
-        fetchCandidatesPublic();
-        console.log("Called fetchCandidatesPublic()");
-      } else {
-        console.warn("No fetchCandidates function found in either store");
-      }
-    } catch (err) {
-      console.error("fetch trigger error:", err);
-    }
-  }, []);
+  //   try {
+  //     if (typeof fetchCandidatesAdmin === "function") {
+  //       fetchCandidatesAdmin();
+  //       console.log("Called fetchCandidatesAdmin()");
+  //     } else if (typeof fetchCandidatesPublic === "function") {
+  //       fetchCandidatesPublic();
+  //       console.log("Called fetchCandidatesPublic()");
+  //     } else {
+  //       console.warn("No fetchCandidates function found in either store");
+  //     }
+  //   } catch (err) {
+  //     console.error("fetch trigger error:", err);
+  //   }
+  // }, []);
 
   // ถ้า store มีข้อมูล ใช้ของจริงจาก backend แทน initialCandidates
   // useEffect(() => {
@@ -65,7 +65,7 @@ const JobApplicantInformation = () => {
   // }, [storeCandidates]);
   // console.log('storeCandidates', storeCandidates)
 
-  // 2) Sync whichever store has data (prefer admin store)
+  // // 2.Sync whichever store has data (prefer admin store)
   useEffect(() => {
     if (Array.isArray(storeCandidatesAdmin) && storeCandidatesAdmin.length > 0) {
       setAllCandidates(storeCandidatesAdmin);
