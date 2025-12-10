@@ -1,26 +1,18 @@
-//src/router/AppRouter.jsx
-
-{/* Testing only */}
-import { ToastContainer } from 'react-toastify'
-
 import { RouterProvider } from 'react-router'
-import router, { adminRouter, clientRouter, userRouter } from './index'
+import { adminRouter, examRouter, userRouter } from './router'
 
 function AppRouter() {
 
-    clientRouter //landingPage
-    adminRouter //adminPage
-    userRouter //userPage
+    const isLoggedIn = Boolean(localStorage.getItem("token"));
+    const isApplicantResume = Boolean(localStorage.getItem("candidate_id"));
 
+    const router = isLoggedIn
+        ? adminRouter
+        : isApplicantResume
+            ? examRouter
+            : userRouter;
 
-    return (
-        <>
-        <RouterProvider router={router} />
-        
-        {/* Testing only */}
-        <ToastContainer position="top-right" autoClose={3000} />
-        </>
-    )
+    return <RouterProvider router={router} />;
 }
 
-export default AppRouter
+export default AppRouter;

@@ -10,7 +10,7 @@ import LogoutModal from "../../components/admin/LogoutModal"; // ✅ Import Comp
 import { Users, Clock, CheckCircle, XCircle, LayoutDashboard, ChevronLeft, ChevronRight, User, LogOut as LogOutIcon } from "lucide-react"; // ✅ 3. เพิ่ม Icon Logout
 
 // =============================================================================================
-// II. HELPER FUNCTIONS (CALENDAR LOGIC)
+// I. HELPER FUNCTIONS (CALENDAR LOGIC)
 // =============================================================================================
 const getCalendarDays = (date) => {
   const year = date.getFullYear();
@@ -28,9 +28,11 @@ const getCalendarDays = (date) => {
 
   for (let i = 1; i <= numDays; i++) {
     const currentDate = new Date(year, month, i);
+    // ปรับ timezone offset เพื่อความชัวร์ (Optional)
+    const dateString = currentDate.toLocaleDateString('en-CA'); // YYYY-MM-DD
     calendarDays.push({
       date: currentDate,
-      dateString: currentDate.toISOString().split("T")[0],
+      dateString: dateString, 
       dayOfMonth: i,
     });
   }
@@ -47,7 +49,7 @@ const countApplicantsByDate = (applicants) => {
 };
 
 // =============================================================================================
-// III. SUB-COMPONENTS (UI ELEMENTS)
+// II. SUB-COMPONENTS (UI ELEMENTS)
 // =============================================================================================
 const StatCard = ({ title, value, icon: Icon, colorClass, bgColorClass }) => (
   <div className="bg-white p-6 rounded-xl shadow-md border-t-4" style={{ borderColor: colorClass.split("-")[1] }}>
@@ -172,7 +174,7 @@ const ApplicantModal = ({ date, applicants, onClose }) => {
               >
                 <div className="flex-1 min-w-0 pr-4">
                   <p className="font-semibold text-gray-900 truncate flex items-center">
-                    <User size={16} className="text-indigo-500 mr-2 flex-shrink-0" />
+                    <User size={16} className="text-indigo-500 mr-2 shrink-0" />
                     {cleanedName}
                     <span className="ml-4 px-2 py-0.5 text-sm font-semibold text-indigo-700 bg-indigo-50 rounded-md">({app.applicationTime} น.)</span>
                   </p>
@@ -276,9 +278,8 @@ const ApplicantCalendar = ({ applicants, currentDate, setCurrentDate }) => {
                 <button
                   key={index}
                   onClick={() => handleMonthSelect(index)}
-                  className={`py-2 text-sm rounded-lg transition-colors ${
-                    index === currentDate.getMonth() && currentYear === new Date().getFullYear() ? "bg-indigo-600 text-white font-bold" : "text-gray-700 hover:bg-indigo-50"
-                  }`}
+                  className={`py-2 text-sm rounded-lg transition-colors ${index === currentDate.getMonth() && currentYear === new Date().getFullYear() ? "bg-indigo-600 text-white font-bold" : "text-gray-700 hover:bg-indigo-50"
+                    }`}
                 >
                   {monthName}
                 </button>
@@ -333,7 +334,7 @@ const ApplicantCalendar = ({ applicants, currentDate, setCurrentDate }) => {
 };
 
 // =============================================================================================
-// IV. MAIN COMPONENT (DASHBOARDPAGE)
+// III. MAIN COMPONENT (DASHBOARDPAGE)
 // =============================================================================================
 const DashboardPage = () => {
   // ใช้ store ที่คุณสร้าง: ชื่อ useCandidateStore
@@ -342,6 +343,36 @@ const DashboardPage = () => {
     // ✅ 4. ดึงข้อมูล User จาก Auth Store - Show user login
   const {user, logout } = useAuthStore();
   const navigate = useNavigate();
+
+const TestUserDisplay = () => {
+  // 1. ดึงค่าจาก Store รอไว้
+  const user = useAuthdddddddddddddddddddStore((state) => state.user);
+  const fetchUserData = useAuthStore((state) => state.fetchUserData);
+
+  // 2. ใช้ useEffect เพื่อเรียกฟังก์ชันเมื่อหน้าเว็บโหลด
+  useEffect(() => {
+    // สมมติว่า fetchUserData รองรับการรับ Mock Data (ถ้าไม่รองรับ ต้องแก้ที่ Store)
+    const mockData = {
+      firstName: "nie",
+      role: "cc21"
+    };
+    
+    fetchUserData(mockData); 
+    
+    // Log ดูค่าที่ส่งไป (ไม่ใช่ค่าที่ return กลับมา)
+    console.log("Setting user data:", mockData);
+  }, []); // [] เพื่อให้ทำแค่ครั้งเดียวตอน Mount
+
+  // 3. Log ดูว่า Store อัปเดตหรือยัง (จะทำงานทุกครั้งที่ user เปลี่ยน)
+  console.log("Current User in Store:", user);
+
+  return (
+    <div>
+      <h1>User Name: {user?.firstName}</h1>
+      <p>Role: {user?.role}</p>
+    </div>
+  );
+};
 
   // currentDate ย้ายขึ้นมาจาก ApplicantCalendar เพื่อให้การเปลี่ยนเดือน trigger fetchCandidates
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -366,13 +397,13 @@ const DashboardPage = () => {
      // แสดง Toast แจ้งเตือน
     toast.info("กำลังออกจากระบบ...", {
       autoClose: 2000, // 
-      closeButton: false, // ซ่อนปุ่มปิดเพื่อให้ดูเหมือน loading
+      closeButton: false, 
     });
 
-   // หน่วงเวลา 8 วินาที (8000 ms) ก่อนเปลี่ยนหน้า
+   // หน่วงเวลา  2 วินาที (2000 ms) ก่อนเปลี่ยนหน้า
     setTimeout(() => {
       logout(); // เรียกฟังก์ชัน logout จาก Store (ล้างค่า user)
-      navigate("/admin/login"); // เปลี่ยนไปหน้า Login
+      navigate("/admin/login", { replace: true }); // เปลี่ยนไปหน้า Login
     }, 2000);
   };
 
@@ -385,12 +416,14 @@ const DashboardPage = () => {
     const from = startOfMonth.toISOString().split("T")[0];
     const to = endOfMonth.toISOString().split("T")[0];
 
+
     // เรียก fetchCandidates พร้อม params (backend ควรรองรับ query params from/to)
     fetchCandidates({ from, to, perPage: 500 }).catch((err) => {
       console.error("fetchCandidates failed:", err);
       toast.error("ไม่สามารถโหลดข้อมูลผู้สมัครได้");
     });
   }, [fetchCandidates, currentDate]);
+
 
   // rename local variable to match previous UI names
   const applicants = candidates || [];
@@ -406,7 +439,7 @@ const DashboardPage = () => {
       
       {/* ================= HEADER SECTION (UPDATED) ================= */}
       <header className="flex justify-between items-center pb-4 border-b border-gray-200">
-        <h1 className="text-3xl font-extrabold text-[#0b2545] flex items-center gap-2">
+        <h1 className="text-3xl font-extrabold text-navy flex items-center gap-2">
           <LayoutDashboard size={28} /> Dashboard ภาพรวมการรับสมัคร
         </h1>
         
@@ -417,13 +450,14 @@ const DashboardPage = () => {
             <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold border border-indigo-200">
               {user?.firstName ? user.firstName.charAt(0).toUpperCase() : "U"}
             </div>
+
             {/* Info: ชื่อและตำแหน่ง */}
             <div className="flex flex-col">
               <span className="text-sm font-bold text-gray-700 hidden sm:inline">
-                {user?.firstName || "Admin"} {user?.lastName || ""}
+                {user?.firstName || user?.displayName || user?.name || "Guest User"}
               </span>
               <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider hidden sm:block">
-                {user?.role || "Recruiter"}
+                {user?.role || "Role Not Set"}
               </span>
             </div>
           </div>
@@ -457,7 +491,7 @@ const DashboardPage = () => {
         <div className="lg:col-span-1">{loading ? <p className="p-8 text-center bg-white rounded-xl shadow-md">กำลังโหลดข้อมูลกราฟ...</p> : <ApplicantDonutChart applicants={applicants} />}</div>
       </div>
 
-      {/* ✅ เรียกใช้ LogoutModal Component แทนโค้ดเดิม */}
+     {/* ✅ เรียกใช้ LogoutModal Component แทนโค้ดเดิม */}
       <LogoutModal 
         isOpen={showLogoutModal}
         onClose={() => setShowLogoutModal(false)}

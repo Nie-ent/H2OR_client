@@ -39,23 +39,23 @@ const JobApplicantInformation = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
   const fetchCandidate = useCandidateStore((s) => s.fetchCandidates);
-  // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
-  // useEffect(() => {
+  //โหลดข้อมูลจาก backend เมื่อเข้าเพจ
+  useEffect(() => {
     // fetchCandidates();
-  //   try {
-  //     if (typeof fetchCandidatesAdmin === "function") {
-  //       fetchCandidatesAdmin();
-  //       console.log("Called fetchCandidatesAdmin()");
-  //     } else if (typeof fetchCandidatesPublic === "function") {
-  //       fetchCandidatesPublic();
-  //       console.log("Called fetchCandidatesPublic()");
-  //     } else {
-  //       console.warn("No fetchCandidates function found in either store");
-  //     }
-  //   } catch (err) {
-  //     console.error("fetch trigger error:", err);
-  //   }
-  // }, []);
+    try {
+      if (typeof fetchCandidatesAdmin === "function") {
+        fetchCandidatesAdmin();
+        console.log("Called fetchCandidatesAdmin()");
+      } else if (typeof fetchCandidatesPublic === "function") {
+        fetchCandidatesPublic();
+        console.log("Called fetchCandidatesPublic()");
+      } else {
+        console.warn("No fetchCandidates function found in either store");
+      }
+    } catch (err) {
+      console.error("fetch trigger error:", err);
+    }
+  }, []);
 
   // ถ้า store มีข้อมูล ใช้ของจริงจาก backend แทน initialCandidates
   // useEffect(() => {
@@ -65,21 +65,21 @@ const JobApplicantInformation = () => {
   // }, [storeCandidates]);
   // console.log('storeCandidates', storeCandidates)
 
-  // // 2.Sync whichever store has data (prefer admin store)
+  // 2.Sync whichever store has data (prefer admin store)
   useEffect(() => {
     if (Array.isArray(storeCandidatesAdmin) && storeCandidatesAdmin.length > 0) {
       setAllCandidates(storeCandidatesAdmin);
-      console.log("Using admin store candidates:", storeCandidatesAdmin.length);
+      // console.log("Using admin store candidates:", storeCandidatesAdmin.length);
       return;
     }
     if (Array.isArray(storeCandidatesPublic) && storeCandidatesPublic.length > 0) {
       setAllCandidates(storeCandidatesPublic);
-      console.log("Using public store candidates:", storeCandidatesPublic.length);
+      // console.log("Using public store candidates:", storeCandidatesPublic.length);
       return;
     }
     // empty: set empty array
     setAllCandidates([]);
-    console.log("No candidates found in stores");
+    // console.log("No candidates found in stores");
   }, [storeCandidatesAdmin, storeCandidatesPublic]);
 
   // --- 2. Filter Logic ---
@@ -94,6 +94,8 @@ const JobApplicantInformation = () => {
     });
   }, [allCandidates, filters]);
 
+  // console.log('filteredCandidates: ', filteredCandidates[0].email)
+
   // --- 3. Handlers ---
   const toggleSelection = (id) => {
     const newSelected = new Set(selectedItems);
@@ -107,7 +109,7 @@ const JobApplicantInformation = () => {
     setSelectedCandidate(null);
   };
 
-  const fetchCandidates = useAdminCandidateStore(staet => staet.fetchCandidates)
+  const fetchCandidates = useAdminCandidateStore(state => state.fetchCandidates)
 
   // แก้ตรงนี้ให้ยิง API แทน fake เพิ่มใน state อย่างเดียว
   const handleSaveCandidate = async (formData) => {
@@ -199,8 +201,8 @@ const JobApplicantInformation = () => {
           </div>
         ) : (
           filteredCandidates.map((candidate) => (
-            <CandidateCard
-              key={candidate.id}
+            < CandidateCard
+              key={candidate.candidate_id}
               candidate={candidate}
               isSelected={selectedItems.has(candidate.id)}
               onToggle={toggleSelection}

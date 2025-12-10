@@ -184,35 +184,28 @@ const RegisterForm = () => {
   const onSubmit = async (data) => {
     // setIsSubmitting(true);  // ไม่ต้องใช้แล้วเพราะเราใช้ isLoading จาก store
     try {
-
-      console.log("Submitting:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1500)); // Mock API
-
+      // await new Promise((resolve) => setTimeout(resolve, 1500)); // Mock API
       const payload = {
         ...data,
         resume: data.resume[0], // Get the first file object
       };
-
       console.log("Submitting:", payload);
-
       // ✅ เรียก Action จาก Store
       const result = await registerCandidate(payload);
       const candidateId = result?.data?.candidate_id || result?.candidate?.candidate_id || result?.candidate_id;
 
-      const resFormResumeApplication = resume(candidateId, data.resume[0])
 
-      if (resFormResumeApplication) return
+      const resFormResumeApplication = resume(candidateId, data.resume[0])
+      console.log('resFormResumeApplication', resFormResumeApplication)
+
+      // if (resFormResumeApplication) return
 
       toast.success("ส่งใบสมัครเรียบร้อยแล้ว!");
       reset();
 
-      // ✅ ดึง ID ของผู้สมัครจาก Response
-      console.log("Registration Result:", result);
-
-
       if (candidateId) {
-        // ✅  ส่งไปหน้า Welcome พร้อม ID
-        navigate(`/welcome-test/${candidateId}`); // Redirect after success
+        localStorage.setItem("candidate_id", candidateId)
+        navigate('/quiz');
       }
     } catch (error) {
       toast.error("เกิดข้อผิดพลาดในการส่งข้อมูล");
