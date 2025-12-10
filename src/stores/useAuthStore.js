@@ -67,22 +67,23 @@ export const useAuthStore = create(
       token: null,
       isAuthenticated: false,
 
-      login: (userData, token) => {
-        console.log("🚀 LOGIN ACTION TRIGGERED");
-        console.log("📥 Input Data:", userData);
+      // ✅ ฟังก์ชัน Login: รับค่าจาก Backend แล้ว "แกะ" เฉพาะข้อมูล User มาเก็บ
+      login: (response, token) => {
+        console.log("🚀 Login Action Triggered");
+        console.log("📥 Raw Response:", response);
 
-        // 1. หา User Object ให้เจอ ไม่ว่าจะซ่อนอยู่ชั้นไหน
+        // 1. Logic การหา User Object (รองรับหลายรูปแบบ response structure)
         let userProfile = null;
 
-        // เช็คทีละชั้น (ปลอดภัยที่สุด)
-        if (userData?.data?.data?.user) {
-          userProfile = userData.data.data.user; // โครงสร้างตามที่คุณเคยบอก
-        } else if (userData?.data?.user) {
-          userProfile = userData.data.user;
-        } else if (userData?.user) {
-          userProfile = userData.user;
+        // เช็คไล่ระดับความลึกของข้อมูล (ตามที่คุณเคยแจ้งไว้คือ response.data.data.user)
+        if (response?.data?.data?.user) {
+          userProfile = response.data.data.user; 
+        } else if (response?.data?.user) {
+          userProfile = response.data.user;
+        } else if (response?.user) {
+          userProfile = response.user;
         } else {
-          userProfile = userData; // กรณีส่ง user object มาตรงๆ
+          userProfile = response; // กรณีส่ง object user มาตรงๆ
         }
 
         // 2. Clone Object เพื่อแก้ปัญหา Reference (สำคัญมากสำหรับการบันทึกลง Storage)

@@ -343,45 +343,15 @@ const DashboardPage = () => {
     // ✅ 4. ดึงข้อมูล User จาก Auth Store - Show user login
   const {user, logout } = useAuthStore();
   const navigate = useNavigate();
-
-const TestUserDisplay = () => {
-  // 1. ดึงค่าจาก Store รอไว้
-  const user = useAuthdddddddddddddddddddStore((state) => state.user);
-  const fetchUserData = useAuthStore((state) => state.fetchUserData);
-
-  // 2. ใช้ useEffect เพื่อเรียกฟังก์ชันเมื่อหน้าเว็บโหลด
-  useEffect(() => {
-    // สมมติว่า fetchUserData รองรับการรับ Mock Data (ถ้าไม่รองรับ ต้องแก้ที่ Store)
-    const mockData = {
-      firstName: "nie",
-      role: "cc21"
-    };
-    
-    fetchUserData(mockData); 
-    
-    // Log ดูค่าที่ส่งไป (ไม่ใช่ค่าที่ return กลับมา)
-    console.log("Setting user data:", mockData);
-  }, []); // [] เพื่อให้ทำแค่ครั้งเดียวตอน Mount
-
-  // 3. Log ดูว่า Store อัปเดตหรือยัง (จะทำงานทุกครั้งที่ user เปลี่ยน)
-  console.log("Current User in Store:", user);
-
-  return (
-    <div>
-      <h1>User Name: {user?.firstName}</h1>
-      <p>Role: {user?.role}</p>
-    </div>
-  );
-};
-
   // currentDate ย้ายขึ้นมาจาก ApplicantCalendar เพื่อให้การเปลี่ยนเดือน trigger fetchCandidates
   const [currentDate, setCurrentDate] = useState(new Date());
-
   // ✅ เพิ่ม state สำหรับเช็คสถานะการ logout
   const [isLogOut, setIsLogOut] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false); // ✅ เพิ่ม State สำหรับ Modal
 
-  
+  // ✅ DEBUG: ดูว่ามีข้อมูล User เข้ามาหรือไม่ (สามารถลบออกได้เมื่อใช้งานจริง)
+  console.log("Current User in Dashboard:", user);
+
   // ✅ 5. ฟังก์ชันเรียกเมื่อกดปุ่ม Logout (เปิด Modal)
   const handleLogoutClick = () => {
     setShowLogoutModal(true);
@@ -403,7 +373,9 @@ const TestUserDisplay = () => {
    // หน่วงเวลา  2 วินาที (2000 ms) ก่อนเปลี่ยนหน้า
     setTimeout(() => {
       logout(); // เรียกฟังก์ชัน logout จาก Store (ล้างค่า user)
-      navigate("/admin/login", { replace: true }); // เปลี่ยนไปหน้า Login
+      // นำทางไปยังหน้า Login
+      // navigate("/admin/login", { replace: true }); 
+      window.location.replace("/admin/login");
     }, 2000);
   };
 
