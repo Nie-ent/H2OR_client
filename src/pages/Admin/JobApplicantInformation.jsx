@@ -33,7 +33,8 @@ const {
   });
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
+  const fetchCandidate = useCandidateStore((s) => s.fetchCandidates);
+  //โหลดข้อมูลจาก backend เมื่อเข้าเพจ
   useEffect(() => {
   try {
     if (typeof fetchCandidates === "function") {
@@ -47,7 +48,7 @@ const {
   }
 }, []);
 
-  // 2) Sync whichever store has data (prefer admin store)
+  // 2.Sync whichever store has data (prefer admin store)
   useEffect(() => {
   if (Array.isArray(storeCandidates) && storeCandidates.length > 0) {
     setAllCandidates(storeCandidates);
@@ -83,6 +84,9 @@ const {
     setSelectedCandidate(null);
   };
 
+  const fetchCandidates = useAdminCandidateStore(state => state.fetchCandidates)
+
+  // แก้ตรงนี้ให้ยิง API แทน fake เพิ่มใน state อย่างเดียว
   const handleSaveCandidate = async (formData) => {
   try {
     // 1) แปลงข้อมูลจากฟอร์มให้ตรงกับที่ backend/DB ใช้

@@ -65,18 +65,20 @@ const AdminLoginPage = () => {
       const role = responseData.user.role
 
       // บันทึกลง Store
-      localStorage.setItem("token", token)
-      localStorage.setItem("role", role)
+      // localStorage.setItem("token", token)
+      // localStorage.setItem("role", role)
 
       if (!user || !token) {
         throw new Error("ไม่พบข้อมูลผู้ใช้งาน หรือ Token");
       }
 
-      // 🔍 Debug: ดูโครงสร้างข้อมูลจริงใน Console (สำคัญมาก!)
+       // -------------------------------------------------------
+      // 🚨 จุดที่แก้ไข: เรียกใช้ loginAction เพื่อบันทึกลง Store
+      // -------------------------------------------------------
       console.log("Logged in as:", role)
+      loginAction(responseData, token);
 
       toast.success("เข้าสู่ระบบสำเร็จ!");
-
       // เช็ค Role เพื่อ redirect (Optional)
       window.location.reload()
 

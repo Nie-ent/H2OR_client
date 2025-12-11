@@ -2,12 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useCandidateStore } from "../../stores/useCandidateStore";
+import { useAuthStore } from "../../stores/useAuthStore"; // ✅ 1. Import Auth Store - Show User Login
+import { useNavigate } from "react-router-dom"; // ✅ 2. Import Navigate - Show User Login
 import { toast } from "react-toastify";
+import LogoutModal from "../../components/admin/LogoutModal"; // ✅ Import Component ใหม่
 
-import { Users, Clock, CheckCircle, XCircle, LayoutDashboard, ChevronLeft, ChevronRight, User } from "lucide-react";
+import { Users, Clock, CheckCircle, XCircle, LayoutDashboard, ChevronLeft, ChevronRight, User, LogOut as LogOutIcon } from "lucide-react"; // ✅ 3. เพิ่ม Icon Logout
 
 // =============================================================================================
-// II. HELPER FUNCTIONS (CALENDAR LOGIC)
+// I. HELPER FUNCTIONS (CALENDAR LOGIC)
 // =============================================================================================
 const getCalendarDays = (date) => {
   const year = date.getFullYear();
@@ -25,9 +28,11 @@ const getCalendarDays = (date) => {
 
   for (let i = 1; i <= numDays; i++) {
     const currentDate = new Date(year, month, i);
+    // ปรับ timezone offset เพื่อความชัวร์ (Optional)
+    const dateString = currentDate.toLocaleDateString('en-CA'); // YYYY-MM-DD
     calendarDays.push({
       date: currentDate,
-      dateString: currentDate.toISOString().split("T")[0],
+      dateString: dateString, 
       dayOfMonth: i,
     });
   }
@@ -44,7 +49,7 @@ const countApplicantsByDate = (applicants) => {
 };
 
 // =============================================================================================
-// III. SUB-COMPONENTS (UI ELEMENTS)
+// II. SUB-COMPONENTS (UI ELEMENTS)
 // =============================================================================================
 const StatCard = ({ title, value, icon: Icon, colorClass, bgColorClass }) => (
   <div className="bg-white p-6 rounded-xl shadow-md border-t-4" style={{ borderColor: colorClass.split("-")[1] }}>
@@ -329,14 +334,50 @@ const ApplicantCalendar = ({ applicants, currentDate, setCurrentDate }) => {
 };
 
 // =============================================================================================
-// IV. MAIN COMPONENT (DASHBOARDPAGE)
+// III. MAIN COMPONENT (DASHBOARDPAGE)
 // =============================================================================================
 const DashboardPage = () => {
   // ใช้ store ที่คุณสร้าง: ชื่อ useCandidateStore
   const { candidates, isLoading, fetchCandidates } = useCandidateStore();
 
+    // ✅ 4. ดึงข้อมูล User จาก Auth Store - Show user login
+  const {user, logout } = useAuthStore();
+  const navigate = useNavigate();
   // currentDate ย้ายขึ้นมาจาก ApplicantCalendar เพื่อให้การเปลี่ยนเดือน trigger fetchCandidates
   const [currentDate, setCurrentDate] = useState(new Date());
+  // ✅ เพิ่ม state สำหรับเช็คสถานะการ logout
+  const [isLogOut, setIsLogOut] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // ✅ เพิ่ม State สำหรับ Modal
+
+  // ✅ DEBUG: ดูว่ามีข้อมูล User เข้ามาหรือไม่ (สามารถลบออกได้เมื่อใช้งานจริง)
+  console.log("Current User in Dashboard:", user);
+
+  // ✅ 5. ฟังก์ชันเรียกเมื่อกดปุ่ม Logout (เปิด Modal)
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true);
+  };
+
+  // ✅ 6. ฟังก์ชันยืนยันการออกจากระบบ (ทำงานจริง)
+  const confirmLogout = () => {
+    setShowLogoutModal(false); // ปิด Modal ก่อน
+    if (isLogOut) return;
+
+    setIsLogOut(true)
+
+     // แสดง Toast แจ้งเตือน
+    toast.info("กำลังออกจากระบบ...", {
+      autoClose: 2000, // 
+      closeButton: false, 
+    });
+
+   // หน่วงเวลา  2 วินาที (2000 ms) ก่อนเปลี่ยนหน้า
+    setTimeout(() => {
+      logout(); // เรียกฟังก์ชัน logout จาก Store (ล้างค่า user)
+      // นำทางไปยังหน้า Login
+      // navigate("/admin/login", { replace: true }); 
+      window.location.replace("/admin/login");
+    }, 2000);
+  };
 
   // เมื่อ component mount หรือ currentDate เปลี่ยน -> fetch candidates ของเดือนนั้น
   useEffect(() => {
@@ -347,12 +388,14 @@ const DashboardPage = () => {
     const from = startOfMonth.toISOString().split("T")[0];
     const to = endOfMonth.toISOString().split("T")[0];
 
+
     // เรียก fetchCandidates พร้อม params (backend ควรรองรับ query params from/to)
     fetchCandidates({ from, to, perPage: 500 }).catch((err) => {
       console.error("fetchCandidates failed:", err);
       toast.error("ไม่สามารถโหลดข้อมูลผู้สมัครได้");
     });
   }, [fetchCandidates, currentDate]);
+
 
   // rename local variable to match previous UI names
   const applicants = candidates || [];
@@ -365,13 +408,45 @@ const DashboardPage = () => {
 
   return (
     <div className="space-y-8 p-8 bg-gray-50 min-h-screen">
+      
+      {/* ================= HEADER SECTION (UPDATED) ================= */}
       <header className="flex justify-between items-center pb-4 border-b border-gray-200">
         <h1 className="text-3xl font-extrabold text-navy flex items-center gap-2">
           <LayoutDashboard size={28} /> Dashboard ภาพรวมการรับสมัคร
         </h1>
-        <div className="bg-white p-2 px-4 rounded-full shadow-sm flex items-center gap-2 border border-gray-200">
-          <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold">HR</div>
-          <span className="text-sm font-bold text-gray-700 hidden sm:inline">HR Manager</span>
+        
+        {/* ✅ 6. ส่วนแสดงผล User Profile แบบ Dynamic - Show user login*/}
+        <div className="flex items-center gap-3">
+          <div className="bg-white p-2 pr-4 rounded-full shadow-sm flex items-center gap-3 border border-gray-200">
+            {/* Avatar: ตัวอักษรแรกของชื่อ */}
+            <div className="w-9 h-9 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-700 font-bold border border-indigo-200">
+              {user?.firstName ? user.firstName.charAt(0).toUpperCase() : "U"}
+            </div>
+
+            {/* Info: ชื่อและตำแหน่ง */}
+            <div className="flex flex-col">
+              <span className="text-sm font-bold text-gray-700 hidden sm:inline">
+                {user?.firstName || user?.displayName || user?.name || "Guest User"}
+              </span>
+              <span className="text-[10px] text-gray-500 font-medium uppercase tracking-wider hidden sm:block">
+                {user?.role || "Role Not Set"}
+              </span>
+            </div>
+          </div>
+          
+          {/* ปุ่ม Logout */}
+          <button 
+            onClick={handleLogoutClick}
+            disabled={isLogOut}
+            className={`p-2 rounded-full transition-colors ${
+              isLogOut 
+                ? "bg-gray-100 text-gray-400 cursor-not-allowed animate-pulse" 
+                : "text-gray-400 hover:text-red-500 hover:bg-red-50"
+            }`}
+            title="ออกจากระบบ"
+          >
+            <LogOutIcon size={20} /> 
+          </button>
         </div>
       </header>
 
@@ -387,6 +462,13 @@ const DashboardPage = () => {
 
         <div className="lg:col-span-1">{loading ? <p className="p-8 text-center bg-white rounded-xl shadow-md">กำลังโหลดข้อมูลกราฟ...</p> : <ApplicantDonutChart applicants={applicants} />}</div>
       </div>
+
+     {/* ✅ เรียกใช้ LogoutModal Component แทนโค้ดเดิม */}
+      <LogoutModal 
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={confirmLogout}
+      />
     </div>
   );
 };
