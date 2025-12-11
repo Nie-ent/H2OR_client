@@ -39,7 +39,7 @@ const JobApplicantInformation = () => {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
   const fetchCandidate = useCandidateStore((s) => s.fetchCandidates);
-  // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
+  //โหลดข้อมูลจาก backend เมื่อเข้าเพจ
   useEffect(() => {
     // fetchCandidates();
     try {
@@ -65,7 +65,7 @@ const JobApplicantInformation = () => {
   // }, [storeCandidates]);
   // console.log('storeCandidates', storeCandidates)
 
-  // 2) Sync whichever store has data (prefer admin store)
+  // 2.Sync whichever store has data (prefer admin store)
   useEffect(() => {
     if (Array.isArray(storeCandidatesAdmin) && storeCandidatesAdmin.length > 0) {
       setAllCandidates(storeCandidatesAdmin);
@@ -109,7 +109,7 @@ const JobApplicantInformation = () => {
     setSelectedCandidate(null);
   };
 
-  const fetchCandidates = useAdminCandidateStore(staet => staet.fetchCandidates)
+  const fetchCandidates = useAdminCandidateStore(state => state.fetchCandidates)
 
   // แก้ตรงนี้ให้ยิง API แทน fake เพิ่มใน state อย่างเดียว
   const handleSaveCandidate = async (formData) => {
