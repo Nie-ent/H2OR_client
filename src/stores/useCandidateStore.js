@@ -99,18 +99,29 @@ export const useCandidateStore = create((set, get) => ({
           }
         }
 
-        return {
-          id,
-          firstName,
-          lastName,
-          name: fullName,
-          fullName,
-          position,
-          status,
-          appliedDate,
-          applicationTime,
-          raw: r,
-        };
+          return {
+            id,
+            firstName,
+            lastName,
+            name: fullName,
+            fullName,
+    // 🔹 ข้อมูลที่ UI ใช้เพิ่ม
+            email: r.email ?? "",
+            phone: r.phone ?? r.phoneNumber ?? "",
+            position,
+            positionName: r.positionName ?? position, // ใช้ซ้ำในการ์ด
+            experience: r.experience ?? null,
+            experienceSalary: r.experience_salary ?? null,
+            status,
+            appliedDate,
+            applicationTime,
+            stack: r.stack ?? "",
+            photoUrl: r.photoUrl ?? r.avatarUrl ?? null,
+            resumeUrl: r.resumeUrl ?? r.resume_url ?? r.cvUrl ?? null,
+            score: r.score ?? r.examScore ?? null,
+    // backup ไว้เผื่ออนาคต
+            raw: r,
+  };
       });
 
       set({
@@ -138,7 +149,7 @@ export const useCandidateStore = create((set, get) => ({
     });
 
     try {
-      await api.patch(`/${id}/status`, { status: newStatus });
+      await api.patch(`/candidates/${id}/status`, { status: newStatus });
       return true;
     } catch (error) {
       console.error("updateCandidateStatus failed:", error);
@@ -155,7 +166,7 @@ export const useCandidateStore = create((set, get) => ({
     const cached = get().candidates.find((c) => c.id === id);
     if (cached) return cached;
     try {
-      const res = await api.get(`/${id}`);
+      const res = await api.get(`/candidates/${id}`);
       const r = res.data?.data ?? res.data;
       // map to same shape (reuse mapping logic or extract util)
       return {

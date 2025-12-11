@@ -7,20 +7,15 @@ import InterviewModal from "../../components/admin/InterviewModal";
 import EvaluationModal from "../../components/admin/EvaluationModal";
 import ActionFooter from "../../components/admin/ActionFooter";
 import FilterBar from "../../components/admin/FilterBar";
-import { useAdminCandidateStore } from "../../stores/useAdminCandidateStore";
 import { useCandidateStore } from "../../stores/useCandidateStore";
 
-// const JobApplicantInformation = ({ candidates = initialCandidates }) => {
 const JobApplicantInformation = () => {
-  const {
-    // candidates: storeCandidates,
-    candidates: storeCandidatesAdmin,
-    fetchCandidates: fetchCandidatesAdmin,
-    createCandidate,
-  } = useAdminCandidateStore();
-
-  // Also grab the other store (if exists) for debugging:
-  const { candidates: storeCandidatesPublic, fetchCandidates: fetchCandidatesPublic } = useCandidateStore();
+  // ใช้ store เดียวสำหรับทั้ง admin + public
+const {
+  candidates: storeCandidates,
+  fetchCandidates,
+  registerCandidate,
+} = useCandidateStore();
 
   // --- 1. State Management ---
   const [allCandidates, setAllCandidates] = useState([]);
@@ -38,49 +33,28 @@ const JobApplicantInformation = () => {
   });
   const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-  const fetchCandidate = useCandidateStore((s) => s.fetchCandidates);
   // โหลดข้อมูลจาก backend เมื่อเข้าเพจ
   useEffect(() => {
-    // fetchCandidates();
-    try {
-      if (typeof fetchCandidatesAdmin === "function") {
-        fetchCandidatesAdmin();
-        console.log("Called fetchCandidatesAdmin()");
-      } else if (typeof fetchCandidatesPublic === "function") {
-        fetchCandidatesPublic();
-        console.log("Called fetchCandidatesPublic()");
-      } else {
-        console.warn("No fetchCandidates function found in either store");
-      }
-    } catch (err) {
-      console.error("fetch trigger error:", err);
+  try {
+    if (typeof fetchCandidates === "function") {
+      fetchCandidates();
+      console.log("Called fetchCandidates() from useCandidateStore");
+    } else {
+      console.warn("fetchCandidates is not a function in useCandidateStore");
     }
-  }, []);
-
-  // ถ้า store มีข้อมูล ใช้ของจริงจาก backend แทน initialCandidates
-  // useEffect(() => {
-  //   if (storeCandidates && storeCandidates.length > 0) {
-  //     setAllCandidates(storeCandidates);
-  //   }
-  // }, [storeCandidates]);
-  // console.log('storeCandidates', storeCandidates)
+  } catch (err) {
+    console.error("fetch trigger error:", err);
+  }
+}, []);
 
   // 2) Sync whichever store has data (prefer admin store)
   useEffect(() => {
-    if (Array.isArray(storeCandidatesAdmin) && storeCandidatesAdmin.length > 0) {
-      setAllCandidates(storeCandidatesAdmin);
-      // console.log("Using admin store candidates:", storeCandidatesAdmin.length);
-      return;
-    }
-    if (Array.isArray(storeCandidatesPublic) && storeCandidatesPublic.length > 0) {
-      setAllCandidates(storeCandidatesPublic);
-      // console.log("Using public store candidates:", storeCandidatesPublic.length);
-      return;
-    }
-    // empty: set empty array
-    setAllCandidates([]);
-    // console.log("No candidates found in stores");
-  }, [storeCandidatesAdmin, storeCandidatesPublic]);
+  if (Array.isArray(storeCandidates) && storeCandidates.length > 0) {
+    setAllCandidates(storeCandidates);
+    return;
+  }
+  setAllCandidates([]);
+}, [storeCandidates]);
 
   // --- 2. Filter Logic ---
   const filteredCandidates = useMemo(() => {
@@ -109,19 +83,39 @@ const JobApplicantInformation = () => {
     setSelectedCandidate(null);
   };
 
-  const fetchCandidates = useAdminCandidateStore(staet => staet.fetchCandidates)
-
-  // แก้ตรงนี้ให้ยิง API แทน fake เพิ่มใน state อย่างเดียว
   const handleSaveCandidate = async (formData) => {
-    try {
-      await createCandidate(formData); // POST ไป backend
-      await fetchCandidates(); // ดึงข้อมูลล่าสุดกลับมา
-      setModals({ ...modals, add: false });
-    } catch (err) {
-      console.error(err);
-      alert("เพิ่มผู้สมัครงานไม่สำเร็จ");
-    }
-  };
+  try {
+    // 1) แปลงข้อมูลจากฟอร์มให้ตรงกับที่ backend/DB ใช้
+    const payload = {
+  firstName: formData.firstName,
+  lastName: formData.lastName,
+  email: formData.email,
+  phone: formData.phone,
+  gender: formData.gender || null,
+  age: formData.age ? Number(formData.age) : null,
+  expectedSalary: formData.expectedSalary ? Number(formData.expectedSalary) : null,
+  idCard: formData.idCard || null,
+  experience_salary: formData.experienceSalary ? Number(formData.experienceSalary) : null,
+  experience: formData.experience ? Number(formData.experience) : null,
+  stack: formData.skills,
+  status: formData.status || "pending",
+  notes: formData.notes,
+  score: formData.examScore ? Number(formData.examScore) : null,
+};
+
+    // 2) ส่ง payload ที่เราจัดแล้วเข้า registerCandidate
+    await registerCandidate(payload);
+
+    // 3) ดึงข้อมูลล่าสุดมาแสดง
+    await fetchCandidates();
+
+    // 4) ปิด modal
+    setModals({ ...modals, add: false });
+  } catch (err) {
+    console.error(err);
+    alert("เพิ่มผู้สมัครงานไม่สำเร็จ");
+  }
+};
 
   const handleSaveInterview = (data) => {
     const updated = allCandidates.map((c) =>
@@ -202,7 +196,8 @@ const JobApplicantInformation = () => {
         ) : (
           filteredCandidates.map((candidate) => (
             < CandidateCard
-              key={candidate.candidate_id}
+              // key={candidate.candidate_id}
+              key={candidate.id}
               candidate={candidate}
               isSelected={selectedItems.has(candidate.id)}
               onToggle={toggleSelection}

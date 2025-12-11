@@ -91,7 +91,7 @@ const CandidateCard = ({
             <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm text-[#637996]">
               <span className="truncate">📧 {candidate.email}</span>
               <span>📱 {candidate.phone}</span>
-              <span>💼 Exp: - ปี</span>
+              <span>💼 Exp: {candidate.experience ?? "-"} ปี</span>
             </div>
 
             {candidate.interviewDetails && (
@@ -140,7 +140,7 @@ const CandidateCard = ({
 
           {/* Button Group */}
           <div className="flex gap-2 justify-end">
-            {candidate.candidate_statuses === "pending" && (
+            {candidate.status === "pending" && (
               <Button
                 variant="secondary"
                 className="text-sm py-2 bg-[#3b5474] hover:bg-[#2c3e56]"
