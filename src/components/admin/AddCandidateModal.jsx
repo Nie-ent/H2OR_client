@@ -18,6 +18,10 @@ const AddCandidateModal = ({ isOpen, onClose, onSave }) => {
     skills: "",
     examScore: "",
     notes: "",
+    gender: "",
+    age: "",
+    expectedSalary: "",
+    idCard: "",
   });
 
   // Local submitting state to disable inputs/buttons while saving
